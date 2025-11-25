@@ -1,10 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
 // Type definitions for database tables
 export interface User {
   id: string
@@ -25,3 +20,36 @@ export interface GeneratedImage {
   accessories: string
   created_at: string
 }
+
+// Lazy-load Supabase client to avoid build-time initialization errors
+let supabaseClient: any = null
+
+export function getSupabaseClient() {
+  if (!supabaseClient) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    
+    if (!url || !key) {
+      console.warn('Supabase credentials not configured')
+      return null
+    }
+    
+    supabaseClient = createClient(url, key)
+  }
+  return supabaseClient
+}
+
+export function getSupabaseServerClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!url || !key) {
+    console.warn('Supabase server credentials not configured')
+    return null
+  }
+  
+  return createClient(url, key)
+}
+
+// Keep backward compatibility
+export const supabase = getSupabaseClient()
