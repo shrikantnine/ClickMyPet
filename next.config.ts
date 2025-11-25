@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // No external image patterns needed since we're using solid color placeholders
 };
 
 export default nextConfig;

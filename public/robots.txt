@@ -1,0 +1,184 @@
+# robots.txt for PetPX (Click My Pet)
+# Last Updated: November 10, 2025
+# 
+# This file controls how search engines crawl and index our website.
+# Following Google's best practices for optimal SEO performance.
+
+# ============================================
+# MAIN CRAWLERS - FULL ACCESS
+# ============================================
+
+# Google Bot (most important)
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Google Image Bot (critical for pet photo site)
+User-agent: Googlebot-Image
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /result/
+
+# Bing Bot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Yahoo Bot
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+# ============================================
+# ALL OTHER CRAWLERS - DEFAULT RULES
+# ============================================
+
+User-agent: *
+
+# ALLOW - Public Pages (High SEO Value)
+Allow: /
+Allow: /blog
+Allow: /blog/*
+Allow: /gallery
+Allow: /onboarding
+Allow: /try-free
+Allow: /referral
+Allow: /privacy-policy
+Allow: /terms-conditions
+
+# ALLOW - Static Assets (Important for Page Speed & UX)
+Allow: /Dog/*.png
+Allow: /Cat/*.png
+Allow: /Other/*.png
+Allow: /*.css
+Allow: /*.js
+Allow: /*.woff
+Allow: /*.woff2
+Allow: /favicon.ico
+Allow: /og-*.png
+Allow: /apple-touch-icon.png
+
+# DISALLOW - Admin & Internal Pages (No SEO Value)
+Disallow: /admin/
+Disallow: /officeoftheadmin/
+Disallow: /admin/dashboard
+Disallow: /admin/settings
+Disallow: /admin/visitors
+
+# DISALLOW - User Account Pages (Private Content)
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /result
+Disallow: /result/
+
+# DISALLOW - Checkout & Payment (No Index Value)
+Disallow: /checkout
+Disallow: /checkout/
+Disallow: /payment-success
+Disallow: /payment-success/
+
+# DISALLOW - Login Pages (No SEO Value)
+Disallow: /login
+Disallow: /login/
+
+# DISALLOW - API Routes (Technical Endpoints)
+Disallow: /api/
+Disallow: /_next/
+Disallow: /_vercel/
+
+# DISALLOW - Search & Filter Parameters (Prevent Duplicate Content)
+Disallow: /*?*ref=*
+Disallow: /*?*utm_*
+Disallow: /*?*fbclid=*
+Disallow: /*?*gclid=*
+Disallow: /*?*source=*
+Disallow: /*?*campaign=*
+
+# DISALLOW - File Types (No SEO Value)
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*.pdf$
+
+# ============================================
+# BAD BOTS & SCRAPERS - BLOCK COMPLETELY
+# ============================================
+
+# AI Scrapers (Protect Content)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+# Common Bad Bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# Aggressive Crawlers
+User-agent: Yandex
+Crawl-delay: 5
+
+User-agent: Baiduspider
+Crawl-delay: 5
+
+# ============================================
+# SITEMAP LOCATION
+# ============================================
+
+Sitemap: https://petpx.com/sitemap.xml
+
+# ============================================
+# NOTES FOR DEVELOPERS
+# ============================================
+#
+# Priority Pages for SEO:
+# 1. Homepage (/) - Main conversion page
+# 2. Gallery (/gallery) - Showcase work
+# 3. Blog (/blog) - Organic traffic driver
+# 4. Try Free (/try-free) - Lead generation
+# 5. Referral (/referral) - Growth marketing
+#
+# Blocked Pages Explanation:
+# - /admin/* - Internal use only, security risk
+# - /dashboard - User-specific content
+# - /checkout - Payment security
+# - /result - Dynamic user content
+# - API routes - Technical endpoints
+#
+# Image Indexing:
+# - Allowing all /Dog/, /Cat/, /Other/ images
+# - Critical for image search traffic
+# - Pet photos are main content type
+#
+# Performance Optimization:
+# - Crawl-delay set appropriately per bot
+# - Prevents server overload
+# - Balances SEO with performance
+#
