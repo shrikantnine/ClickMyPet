@@ -1,9 +1,8 @@
 
-'use client'
-export const dynamic = 'force-dynamic'
+ 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -11,9 +10,8 @@ import { Download, Share2, Sparkles, Clock } from 'lucide-react'
 
 export default function ResultPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const jobId = searchParams.get('jobId')
-  const userId = searchParams.get('userId')
+  const [jobId, setJobId] = useState<string | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
 
   const [isLoading, setIsLoading] = useState(true)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
@@ -21,14 +19,28 @@ export default function ResultPage() {
   const [pollCount, setPollCount] = useState(0)
 
   useEffect(() => {
-    if (!jobId) {
-      setError('No job ID provided')
-      setIsLoading(false)
-      return
-    }
+    // Read query params on client to avoid useSearchParams build-time issues
+    try {
+      const params = new URLSearchParams(window.location.search)
+      const j = params.get('jobId')
+      const u = params.get('userId')
+      setJobId(j)
+      setUserId(u)
 
-    pollJobStatus()
-  }, [jobId])
+      if (!j) {
+        setError('No job ID provided')
+        setIsLoading(false)
+        return
+      }
+
+      // start polling after we set jobId
+      pollJobStatus()
+    } catch (err) {
+      setError('Failed to read query params')
+      setIsLoading(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const pollJobStatus = async () => {
     const maxPolls = 30 // 5 minutes max (30 * 10 seconds)
