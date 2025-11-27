@@ -4,15 +4,6 @@
 import Razorpay from 'razorpay'
 import crypto from 'crypto'
 
-// Razorpay instance (server-side only)
-export const razorpayInstance = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-})
-
-import Razorpay from 'razorpay'
-import crypto from 'crypto'
-
 // Lazy-initialize Razorpay instance so build-time
 // evaluation doesn't crash when env vars are not set.
 let _razorpayInstance: any = null
@@ -24,7 +15,7 @@ function getRazorpayInstance() {
   const keySecret = process.env.RAZORPAY_KEY_SECRET
 
   if (!keyId || !keySecret) {
-    // Do not throw during build — throw at runtime when called
+    // Throw a clear runtime error when called without credentials
     throw new Error('Razorpay credentials missing. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in environment variables.')
   }
 
