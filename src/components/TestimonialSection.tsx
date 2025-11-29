@@ -98,7 +98,7 @@ export default function TestimonialSection() {
             <div
               className="w-full max-w-md mx-auto bg-white rounded-2xl p-6 shadow-lg border border-gray-100 flex flex-col relative overflow-hidden"
               style={{
-                backgroundImage: `url('/testimonial/Click My Pet Testimonial ${testimonials[current].name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
+                backgroundImage: `url('/Testimonial/Click My Pet Testimonial ${testimonials[current].name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 minHeight: '340px',
@@ -148,7 +148,7 @@ export default function TestimonialSection() {
               key={index}
               className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col relative overflow-hidden"
               style={{
-                backgroundImage: `url('/testimonial/Click My Pet Testimonial ${testimonial.name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
+                backgroundImage: `url('/Testimonial/Click My Pet Testimonial ${testimonial.name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 minHeight: '340px',
