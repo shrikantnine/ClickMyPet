@@ -62,12 +62,12 @@ export default function GallerySection() {
   return (
     <section 
       id="gallery"
-      className="w-screen h-[130vh] bg-gray-50 overflow-hidden flex flex-col"
+      className="w-screen h-[140vh] bg-gray-50 overflow-hidden flex flex-col"
     >
       <div className="container mx-auto px-4 py-8 flex-shrink-0">
         <div className="text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Amazing Results From Our AI
+            Amazing Results
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
             See what other pet parents have created with Click My Pet. Your furry friend could be next!

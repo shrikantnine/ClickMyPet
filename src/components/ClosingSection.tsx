@@ -61,8 +61,8 @@ export default function ClosingSection() {
 
   return (
     <section 
-      className="bg-gradient-to-br from-blue-600 to-purple-700 text-white overflow-hidden w-screen h-[100vh] lg:h-[80vh] flex flex-col justify-center"
-      style={{ paddingTop: SPACING.SECTION_GAP * 0.5, paddingBottom: SPACING.SECTION_GAP * 0.5 }}
+      className="bg-gradient-to-br from-blue-600 to-purple-700 text-white overflow-hidden w-screen h-auto md:h-[100vh] lg:h-[80vh] flex flex-col justify-center"
+      style={{ paddingTop: SPACING.SECTION_GAP * 2.5, paddingBottom: SPACING.SECTION_GAP * 2.5 }}
     >
       <div className="container mx-auto px-4 space-y-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
@@ -79,27 +79,19 @@ export default function ClosingSection() {
           {/* Scrollable Image Gallery - uniform image sizing */}
           <div className="relative flex flex-col items-center space-y-6">
             <div 
-              className="relative rounded-2xl overflow-hidden flex items-center justify-center"
-              style={{
-                height: "50vh",
-                width: "40vh",
-                aspectRatio: "4/5"
-              }}
+              className="relative rounded-2xl overflow-hidden flex items-center justify-center h-auto md:h-[50vh] w-full md:w-[40vh]"
+              style={{ aspectRatio: "4/5" }}
             >
               {/* Image Carousel/Scroller */}
               <div 
-                className="flex transition-transform duration-500 ease-in-out h-full w-full"
+                className="flex transition-transform duration-500 ease-in-out h-auto md:h-full w-full"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               >
                 {showcaseImages.map((image, index) => (
                   <div
                     key={image.id}
-                    className="flex-shrink-0 h-[50vh] w-[40vh] relative"
-                    style={{
-                      aspectRatio: "4/5",
-                      height: "50vh",
-                      width: "40vh"
-                    }}
+                    className="flex-shrink-0 h-auto md:h-[50vh] w-full md:w-[40vh] relative"
+                    style={{ aspectRatio: "4/5" }}
                   >
                     <Image
                       src={image.src}

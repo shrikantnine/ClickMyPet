@@ -1,30 +1,69 @@
+
+"use client";
+import { useState, useEffect, useRef } from "react";
+
 export default function TestimonialSection() {
   const testimonials = [
     {
       name: "S. Kant",
       pet: "Lado - Orange Cat",
       rating: 5,
-      text: "This app works wonders! It generated some amazing poses and pics for Lado - My Orange cat. Highly recommended.",
+      text: "This app generated some amazing poses and pics for Lado - My Orange cat. Highly recommended.",
     },
     {
       name: "Lucy",
       pet: "Pet Parent",
       rating: 5,
-      text: "Amazing results. Picture quality is great and generated pics are very consistent with real ones. Only sky is the limit for your creativity.",
+      text: "Amazing results. Picture quality and color depth are impressive. Only sky is the limit for your creativity.",
     },
     {
       name: "Pinto",
-      pet: "Pet Enthusiast",
+      pet: "Pet Parent",
       rating: 5,
-      text: "Really like abstract and royalty pictures. It's very hard to distinguish from real ones. Fabulous results.",
+      text: "I liked the anime style and royalty pictures. Fabulous results.",
     },
     {
       name: "Stella",
       pet: "German Shepherd Owner",
       rating: 5,
-      text: "Love the action, mugshot and skateboard filters. It'd be impossible to shoot those in real with my German Shephard. Quality is also amazing. I'd highly recommend it.",
+      text: "Love the action, mugshot and skateboard filters. It'd be impossible to shoot those in real with my German Shepherd.",
     },
   ];
+
+  // Mobile carousel state
+  const [current, setCurrent] = useState(0);
+  const [progress, setProgress] = useState(0); // 0 to 100
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const progressRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Auto-advance every 5s on mobile, with progress bar
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    if (!isMobile) return;
+    setProgress(0);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (progressRef.current) clearInterval(progressRef.current);
+
+    // Progress bar: update every 50ms
+    progressRef.current = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) return 100;
+        return prev + 1;
+      });
+    }, 50);
+
+    // Slide change every 5s
+    intervalRef.current = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % testimonials.length);
+      setProgress(0);
+    }, 5000);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (progressRef.current) clearInterval(progressRef.current);
+    };
+    // eslint-disable-next-line
+  }, [current]);
 
   return (
     <section className="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
@@ -53,35 +92,93 @@ export default function TestimonialSection() {
           </div>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Mobile: Carousel */}
+        <div className="block md:hidden">
+          <div className="flex flex-col items-center">
+            <div
+              className="w-full max-w-md mx-auto bg-white rounded-2xl p-6 shadow-lg border border-gray-100 flex flex-col relative overflow-hidden"
+              style={{
+                backgroundImage: `url('/testimonial/Click My Pet Testimonial ${testimonials[current].name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                minHeight: '340px',
+              }}
+            >
+              <div className="absolute inset-0 bg-white/80" />
+              <div className="relative z-10 flex flex-col h-full">
+                {/* Testimonial Text */}
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  &quot;{testimonials[current].text}&quot;
+                </p>
+                <div className="flex-grow" />
+                {/* Bottom section: border, stars, name, pet */}
+                <div className="border-t border-gray-200 pt-4 mt-auto w-full">
+                  <div className="flex flex-col items-start">
+                    <div className="flex mb-2">
+                      {[...Array(testimonials[current].rating)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className="w-5 h-5 text-yellow-400 fill-current"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="font-semibold text-gray-900">{testimonials[current].name}</p>
+                    <p className="text-sm text-gray-500">{testimonials[current].pet}</p>
+                  </div>
+                </div>
+              </div>
+              {/* Progress Bar */}
+              <div className="absolute left-0 right-0 bottom-0 h-1 bg-gray-200">
+                <div
+                  className="h-full bg-blue-500 transition-all duration-100 linear"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop: Grid */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col"
+              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col relative overflow-hidden"
+              style={{
+                backgroundImage: `url('/testimonial/Click My Pet Testimonial ${testimonial.name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                minHeight: '340px',
+              }}
             >
-              {/* Rating Stars */}
-              <div className="flex mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <svg
-                    key={i}
-                    className="w-5 h-5 text-yellow-400 fill-current"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                  </svg>
-                ))}
-              </div>
-
-              {/* Testimonial Text */}
-              <p className="text-gray-700 mb-4 leading-relaxed flex-grow">
-                &quot;{testimonial.text}&quot;
-              </p>
-
-              {/* Author Info - At Bottom */}
-              <div className="border-t border-gray-100 pt-4 mt-auto">
-                <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                <p className="text-sm text-gray-500">{testimonial.pet}</p>
+              <div className="absolute inset-0 bg-white/80" />
+              <div className="relative z-10 flex flex-col h-full">
+                {/* Testimonial Text */}
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  &quot;{testimonial.text}&quot;
+                </p>
+                <div className="flex-grow" />
+                {/* Bottom section: border, stars, name, pet */}
+                <div className="border-t border-gray-200 pt-4 mt-auto w-full">
+                  <div className="flex flex-col items-start">
+                    <div className="flex mb-2">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className="w-5 h-5 text-yellow-400 fill-current"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                    <p className="text-sm text-gray-500">{testimonial.pet}</p>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

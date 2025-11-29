@@ -8,38 +8,34 @@ import { SPACING } from '@/lib/utils'
 const pricingPlans = [
 	{
 		name: 'Starter',
-		price: 15,
-		originalPrice: 20,
+		price: 29,
 		description: 'Perfect for a tryout',
 		features: [
 			'20 AI generated images',
-			'2 style options',
+			'4 style options',
 			'2 background choices',
-			'HD resolution',
+			'Full HD resolution',
 		],
 		popular: false,
 		buttonText: 'Try Now',
 	},
 	{
 		name: 'Pro',
-		price: 29,
-		originalPrice: 40,
+		price: 49,
 		description: 'Most popular choice',
 		features: [
 			'40 AI generated images',
 			'8 style options',
 			'All background choices',
 			'2K resolution',
-			'Premium accessories',
-			'Priority support',
+			'4 Premium accessories',
 		],
 		popular: true,
 		buttonText: 'Go Pro',
 	},
 	{
 		name: 'Max',
-		price: 49,
-		originalPrice: 80,
+		price: 79,
 		description: 'Best value package',
 		features: [
 			'100 AI generated images',
@@ -103,9 +99,6 @@ export default function PricingSection() {
 									{plan.name}
 								</h3>
 								<div className="mb-4">
-									<span className="text-2xl text-gray-400 line-through mr-2">
-										${plan.originalPrice}
-									</span>
 									<span className="text-4xl font-bold text-gray-900">
 										${plan.price}
 									</span>
