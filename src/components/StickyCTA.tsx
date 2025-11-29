@@ -66,9 +66,9 @@ export default function StickyCTA({ alwaysVisible = false }: StickyCtaProps = {}
           </div>
 
           {/* CTA Button */}
-          <Link href="/try-free">
+          <Link href="/onboarding">
             <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm px-6">
-              ✨ Try FREE Now
+              ✨ Create Your Portrait
             </Button>
           </Link>
         </div>

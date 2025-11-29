@@ -15,9 +15,11 @@ const pricingPlans = [
 			'4 style options',
 			'2 background choices',
 			'Full HD resolution',
+			'15 min delivery',
 		],
 		popular: false,
 		buttonText: 'Try Now',
+		id: 'starter',
 	},
 	{
 		name: 'Pro',
@@ -29,12 +31,14 @@ const pricingPlans = [
 			'All background choices',
 			'2K resolution',
 			'4 Premium accessories',
+			'10 min delivery',
 		],
 		popular: true,
 		buttonText: 'Go Pro',
+		id: 'pro',
 	},
 	{
-		name: 'Max',
+		name: 'Ultra',
 		price: 79,
 		description: 'Best value package',
 		features: [
@@ -46,9 +50,11 @@ const pricingPlans = [
 			'Custom style requests',
 			'Commercial usage rights',
 			'Priority support',
+			'5 min delivery',
 		],
 		popular: false,
-		buttonText: 'Go Max',
+		buttonText: 'Go Ultra',
+		id: 'ultra',
 	},
 ]
 
@@ -66,10 +72,10 @@ export default function PricingSection() {
 				{/* Section Header */}
 				<div className="text-center mb-12">
 					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-						Loved Your Free Portrait?
+						Choose Your Perfect Package
 					</h2>
 					<p className="text-lg text-gray-800 max-w-2xl mx-auto">
-						<strong>Get more amazing portraits at unbeatable prices.</strong>
+						<strong>Get amazing portraits at unbeatable prices.</strong>
 						<br />
 						Choose a plan and create professional portraits for every occasion.
                         <br />
@@ -119,7 +125,7 @@ export default function PricingSection() {
 							</ul>
 
 							<Link
-								href="/onboarding"
+								href={`/onboarding?plan=${plan.id}`}
 								className="mt-auto"
 							>
 								<Button

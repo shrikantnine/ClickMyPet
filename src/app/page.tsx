@@ -15,7 +15,7 @@ import ExitIntentPopup from '@/components/ExitIntentPopup'
 
 export const metadata: Metadata = {
   title: "PetPX - AI Pet Photo Generator | Create Professional Pet Portraits Instantly",
-  description: "Transform your dog, cat, or pet photos into stunning AI portraits. Choose from 15+ artistic styles like Disney, Watercolor & Professional. From $15. Try free now!",
+  description: "Transform your dog, cat, or pet photos into stunning AI portraits. Choose from 15+ artistic styles like Disney, Watercolor & Professional. From $15. Create yours now!",
   keywords: [
     "AI pet photo generator",
     "dog photo AI",

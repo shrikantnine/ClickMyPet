@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PetPX - AI Pet Photo Generator | Professional Pet Portraits in Seconds",
-  description: "Transform your pet photos into stunning AI portraits. 15+ artistic styles, 25+ backgrounds, 4K quality. Dogs, cats & more. From $15. Try free!",
+  description: "Transform your pet photos into stunning AI portraits. 15+ artistic styles, 25+ backgrounds, 4K quality. Dogs, cats & more. From $15. Create yours now!",
   keywords: [
     "AI pet photo generator",
     "pet portrait AI",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "PetPX - AI Pet Photo Generator | Professional Pet Portraits",
-    description: "Create stunning AI pet portraits in seconds. 15+ styles, 25+ backgrounds. From $15. Try free!",
+    description: "Create stunning AI pet portraits in seconds. 15+ styles, 25+ backgrounds. From $15. Create yours now!",
     url: "https://petpx.com",
     siteName: "PetPX",
     images: [
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "PetPX - Turn Your Pet Photos Into AI Masterpieces",
-    description: "Professional AI pet portraits from $15. 15+ styles, 4K quality. Try free today!",
+    description: "Professional AI pet portraits from $15. 15+ styles, 4K quality. Create yours today!",
     images: ["/twitter-image.png"],
     creator: "@petpx",
   },

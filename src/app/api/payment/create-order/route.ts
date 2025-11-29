@@ -7,6 +7,8 @@ import { cookies } from 'next/headers'
 import { createRazorpayOrder } from '@/lib/razorpay'
 import { getPlanById } from '@/lib/pricing'
 
+import { trackUserActivity } from '@/lib/analytics'
+
 export async function POST(request: NextRequest) {
   try {
     // Check environment variables
@@ -18,7 +20,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { planId } = await request.json()
+    const { planId, preferences } = await request.json()
 
     // Validate plan
     const plan = getPlanById(planId)
@@ -91,6 +93,7 @@ export async function POST(request: NextRequest) {
         userId: user.id,
         planId: planId,
         planName: plan.name,
+        ...preferences // Include style/breed preferences in Razorpay dashboard
       },
     })
 
@@ -103,6 +106,17 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    // Track checkout initiation with preferences
+    await trackUserActivity({
+      userId: user.id,
+      action: 'checkout_initiated',
+      metadata: {
+        planId,
+        amount: plan.price,
+        ...preferences
+      }
+    })
 
     // Update payment record with actual Razorpay order ID
     await supabase

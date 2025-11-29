@@ -6,7 +6,7 @@ export interface User {
   email: string
   name: string
   avatar_url?: string
-  subscription_plan?: 'starter' | 'pro' | 'max'
+  subscription_plan?: 'starter' | 'pro' | 'ultra' | 'max'
   credits_remaining: number
   created_at: string
 }

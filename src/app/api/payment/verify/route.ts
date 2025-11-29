@@ -6,6 +6,8 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { verifyPaymentSignature } from '@/lib/razorpay'
 import { getPlanById } from '@/lib/pricing'
+import { mergePlanMetadata } from '@/lib/subscription-orchestrator'
+import { trackSubscription } from '@/lib/analytics'
 
 export async function POST(request: NextRequest) {
   try {
@@ -83,13 +85,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Update payment record
+    // Get plan details
+    const plan = getPlanById(payment.plan_id)
+    if (!plan) {
+      return NextResponse.json(
+        { error: 'Invalid plan' },
+        { status: 400 }
+      )
+    }
+
+    const metadataWithPlan = mergePlanMetadata(payment.metadata, plan)
+    const baseMetadata = {
+      ...metadataWithPlan,
+      lastPaymentVerifiedAt: new Date().toISOString(),
+    }
+
+    // Update payment record with plan metadata
     const { error: updateError } = await supabase
       .from('payments')
       .update({
         razorpay_payment_id,
         razorpay_signature,
         status: 'paid',
+        metadata: baseMetadata,
       })
       .eq('id', payment.id)
 
@@ -98,15 +116,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Failed to update payment' },
         { status: 500 }
-      )
-    }
-
-    // Get plan details
-    const plan = getPlanById(payment.plan_id)
-    if (!plan) {
-      return NextResponse.json(
-        { error: 'Invalid plan' },
-        { status: 400 }
       )
     }
 
@@ -133,6 +142,26 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    const metadataWithSubscription = {
+      ...baseMetadata,
+      subscriptionId: subscription,
+      lastSubscriptionSync: new Date().toISOString(),
+    }
+
+    const { error: metadataUpdateError } = await supabase
+      .from('payments')
+      .update({ metadata: metadataWithSubscription })
+      .eq('id', payment.id)
+
+    if (metadataUpdateError) {
+      console.error('Failed to persist subscription metadata:', metadataUpdateError)
+    }
+
+    await trackSubscription(user.id, 'created', plan.id, {
+      source: 'checkout-verify',
+      paymentId: payment.id,
+    })
 
     return NextResponse.json({
       success: true,

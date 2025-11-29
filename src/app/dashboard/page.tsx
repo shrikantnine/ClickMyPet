@@ -24,6 +24,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 
+const MAX_REFERENCE_PHOTOS = 5
+
 interface Subscription {
   plan: string
   imagesRemaining: number
@@ -43,6 +45,7 @@ interface GeneratedImage {
 interface GenerationJob {
   jobId: string
   status: 'pending' | 'processing' | 'completed' | 'failed'
+  referenceImages?: string[]
 }
 
 export default function UserDashboard() {
@@ -51,8 +54,8 @@ export default function UserDashboard() {
   const [subscription, setSubscription] = useState<Subscription | null>(null)
   const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  const [previewUrls, setPreviewUrls] = useState<string[]>([])
   const [selectedStyle, setSelectedStyle] = useState<string>('professional-portrait')
   const [selectedBackground, setSelectedBackground] = useState<string>('studio-white')
   const [selectedAccessory, setSelectedAccessory] = useState<string>('none')
@@ -60,6 +63,10 @@ export default function UserDashboard() {
   const [generationError, setGenerationError] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [petType, setPetType] = useState<'dog' | 'cat' | 'other'>('dog')
+  const [petBreed, setPetBreed] = useState('')
+  const [petName, setPetName] = useState('')
+  const [customNotes, setCustomNotes] = useState('')
 
   // Load user data and check authentication
   useEffect(() => {
@@ -156,20 +163,40 @@ export default function UserDashboard() {
   }
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setUploadedFile(file)
+    const fileList = e.target.files ? Array.from(e.target.files) : []
+    if (!fileList.length) {
+      return
+    }
+
+    const availableSlots = MAX_REFERENCE_PHOTOS - uploadedFiles.length
+    if (availableSlots <= 0) {
+      alert(`You can upload up to ${MAX_REFERENCE_PHOTOS} photos per batch.`)
+      e.target.value = ''
+      return
+    }
+
+    const filesToAdd = fileList.slice(0, availableSlots)
+
+    filesToAdd.forEach(file => {
       const reader = new FileReader()
       reader.onloadend = () => {
-        setPreviewUrl(reader.result as string)
+        setPreviewUrls(prev => [...prev, reader.result as string])
       }
       reader.readAsDataURL(file)
-    }
+    })
+
+    setUploadedFiles(prev => [...prev, ...filesToAdd])
+    e.target.value = ''
+  }
+
+  const handleRemovePhoto = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, idx) => idx !== index))
+    setPreviewUrls(prev => prev.filter((_, idx) => idx !== index))
   }
 
   const handleGenerateImages = async () => {
-    if (!uploadedFile) {
-      alert('Please upload a pet photo first!')
+    if (!uploadedFiles.length) {
+      alert('Please upload at least one pet photo first!')
       return
     }
 
@@ -183,9 +210,8 @@ export default function UserDashboard() {
     setGenerationError(null)
     
     try {
-      // Upload image using API endpoint
       const formData = new FormData()
-      formData.append('file', uploadedFile)
+      uploadedFiles.forEach(file => formData.append('files', file))
       formData.append('userId', userId || 'anonymous')
 
       const uploadResponse = await fetch('/api/upload-image', {
@@ -196,22 +222,39 @@ export default function UserDashboard() {
       const uploadResult = await uploadResponse.json()
 
       if (!uploadResponse.ok) {
-        throw new Error(uploadResult.error || 'Failed to upload image')
+        throw new Error(uploadResult.error || 'Failed to upload reference photos')
       }
 
-      // Call the generation API with uploaded image URL
-      const response = await fetch('/api/generate-simple', {
+      const petPhotoUrls: string[] = Array.isArray(uploadResult.uploads)
+        ? uploadResult.uploads
+            .map((item: { url?: string }) => item?.url)
+            .filter((url): url is string => Boolean(url))
+        : uploadResult.url
+          ? [uploadResult.url]
+          : []
+
+      if (!petPhotoUrls.length) {
+        throw new Error('No reference photos were saved. Please try again.')
+      }
+
+      const selectionsPayload = {
+        petType,
+        petBreed: petBreed || undefined,
+        petName: petName || undefined,
+        style: selectedStyle,
+        background: selectedBackground,
+        accessories: selectedAccessory && selectedAccessory !== 'none' ? [selectedAccessory] : [],
+        customNotes: customNotes || undefined,
+      }
+
+      const response = await fetch('/api/generate-images', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: userId,
-          petPhotoUrl: uploadResult.url,
-          style: selectedStyle,
-          background: selectedBackground,
-          accessory: selectedAccessory,
-          planId: subscription.plan.toLowerCase(),
+          selections: selectionsPayload,
+          petPhotos: petPhotoUrls,
         }),
       })
 
@@ -221,33 +264,26 @@ export default function UserDashboard() {
         throw new Error(result.error || 'Failed to start generation')
       }
 
-      // Show success message
-      alert(`🎉 Image generation started!\n\nJob ID: ${result.jobId}\n\nYour images will be ready in 2-3 minutes. Check back in the Gallery tab!`)
-      
-      // Update credits locally
-      setSubscription(prev => prev ? {
-        ...prev,
-        imagesRemaining: prev.imagesRemaining - 1
-      } : null)
+      alert(result.message || '🎉 Image generation started! Your portraits will be ready shortly.')
 
-      // Reset form
-      setUploadedFile(null)
-      setPreviewUrl(null)
-      
-      // Poll for completion (optional - can also refresh gallery manually)
-      pollGenerationStatus(result.jobId)
+      setUploadedFiles([])
+      setPreviewUrls([])
+
+      if (result.generationId) {
+        pollGenerationStatus(result.generationId)
+      }
       
     } catch (error) {
       console.error('Generation error:', error)
-      setGenerationError(error instanceof Error ? error.message : 'Failed to generate images')
-      alert('Error: ' + (error instanceof Error ? error.message : 'Failed to generate images'))
+      const message = error instanceof Error ? error.message : 'Failed to generate images'
+      setGenerationError(message)
+      alert('Error: ' + message)
     } finally {
       setIsGenerating(false)
     }
   }
 
-  const pollGenerationStatus = async (jobId: string) => {
-    // Poll every 10 seconds for up to 5 minutes
+  const pollGenerationStatus = async (generationId: string) => {
     let attempts = 0
     const maxAttempts = 30
 
@@ -258,21 +294,23 @@ export default function UserDashboard() {
       }
 
       try {
-        const response = await fetch(`/api/generate-simple?jobId=${jobId}`)
+        const response = await fetch(`/api/generate-images?id=${generationId}`)
         const result = await response.json()
 
         if (result.status === 'completed') {
-          // Refresh gallery
           await loadUserData()
           alert('✨ Your images are ready! Check the Gallery tab.')
           setActiveTab('gallery')
-        } else if (result.status === 'failed') {
-          alert('❌ Image generation failed. Please try again.')
-        } else {
-          // Still processing, poll again
-          attempts++
-          setTimeout(poll, 10000) // 10 seconds
+          return
         }
+
+        if (result.status === 'failed') {
+          alert(result.error || '❌ Image generation failed. Please try again.')
+          return
+        }
+
+        attempts++
+        setTimeout(poll, 10000)
       } catch (error) {
         console.error('Polling error:', error)
         attempts++
@@ -280,7 +318,6 @@ export default function UserDashboard() {
       }
     }
 
-    // Start polling after 5 seconds (simulation mode completes quickly)
     setTimeout(poll, 5000)
   }
 
@@ -293,6 +330,12 @@ export default function UserDashboard() {
     { id: 'renaissance', name: 'Renaissance', emoji: '🖼️' },
     { id: 'minimalist', name: 'Minimalist', emoji: '⚪' },
     { id: 'oil-painting', name: 'Oil Painting', emoji: '🖌️' },
+  ]
+
+  const petTypes = [
+    { id: 'dog' as const, label: 'Dog', emoji: '🐶' },
+    { id: 'cat' as const, label: 'Cat', emoji: '🐱' },
+    { id: 'other' as const, label: 'Other', emoji: '🦊' },
   ]
 
   const backgrounds = [
@@ -493,59 +536,104 @@ export default function UserDashboard() {
 
                 {/* Upload Section */}
                 <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-8">
-                  <div className="flex flex-col items-center justify-center">
-                    {!previewUrl ? (
-                      <label className="w-full cursor-pointer">
-                        <div className="border-2 border-dashed border-blue-300 rounded-xl p-12 text-center hover:border-blue-500 transition-all hover:bg-white/50">
-                          <Upload className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                            Upload Your Pet's Photo
-                          </h3>
-                          <p className="text-gray-600 mb-4">
-                            Click to browse or drag and drop
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Supports: JPG, PNG (Max 10MB)
-                          </p>
+                  <div className="flex flex-col gap-6 w-full">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                      <div>
+                        <p className="text-sm font-semibold text-gray-700 mb-2">Pet Type</p>
+                        <div className="flex flex-wrap gap-2">
+                          {petTypes.map((type) => (
+                            <button
+                              key={type.id}
+                              onClick={() => setPetType(type.id)}
+                              className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold transition-all ${
+                                petType === type.id
+                                  ? 'border-blue-600 bg-white shadow'
+                                  : 'border-blue-200 bg-white/70 hover:border-blue-400'
+                              }`}
+                            >
+                              <span>{type.emoji}</span>
+                              {type.label}
+                            </button>
+                          ))}
                         </div>
+                      </div>
+                      <div>
+                        <label className="text-sm font-semibold text-gray-700 mb-2 block">Breed (optional)</label>
                         <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileUpload}
-                          className="hidden"
+                          type="text"
+                          value={petBreed}
+                          onChange={(event) => setPetBreed(event.target.value)}
+                          placeholder="Golden Retriever"
+                          className="w-full rounded-xl border border-gray-200 bg-white/80 px-4 py-2.5 focus:border-blue-500 focus:outline-none"
                         />
-                      </label>
-                    ) : (
-                      <div className="w-full">
-                        <div className="relative w-full max-w-md mx-auto mb-4">
-                          <Image
-                            src={previewUrl}
-                            alt="Uploaded pet"
-                            width={400}
-                            height={400}
-                            loading="lazy"
-                            className="rounded-xl shadow-lg w-full h-auto"
-                          />
-                          <button
-                            onClick={() => {
-                              setUploadedFile(null)
-                              setPreviewUrl(null)
-                            }}
-                            className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                        <p className="text-center text-sm text-gray-600">
-                          {uploadedFile?.name}
+                      </div>
+                      <div>
+                        <label className="text-sm font-semibold text-gray-700 mb-2 block">Pet Name (optional)</label>
+                        <input
+                          type="text"
+                          value={petName}
+                          onChange={(event) => setPetName(event.target.value)}
+                          placeholder="Luna"
+                          className="w-full rounded-xl border border-gray-200 bg-white/80 px-4 py-2.5 focus:border-blue-500 focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <label className="w-full cursor-pointer">
+                      <div className="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:border-blue-500 transition-all hover:bg-white/60">
+                        <Upload className="w-14 h-14 text-blue-500 mx-auto mb-4" />
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                          Upload up to {MAX_REFERENCE_PHOTOS} pet photos
+                        </h3>
+                        <p className="text-gray-600 mb-2">
+                          Clear, well-lit photos work best. Add different angles for better character lock.
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Supports JPG/PNG • Max 10MB each
                         </p>
                       </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {previewUrls.length > 0 && (
+                      <>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
+                          {previewUrls.map((url, index) => (
+                            <div key={`${url}-${index}`} className="relative group">
+                              <Image
+                                src={url}
+                                alt={`Uploaded pet ${index + 1}`}
+                                width={320}
+                                height={320}
+                                loading="lazy"
+                                className="rounded-xl shadow-lg w-full h-48 object-cover"
+                              />
+                              <button
+                                onClick={() => handleRemovePhoto(index)}
+                                className="absolute top-2 right-2 bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition"
+                                aria-label="Remove photo"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-sm text-gray-600 text-center">
+                          {previewUrls.length}/{MAX_REFERENCE_PHOTOS} photos ready • add more for better character capture
+                        </p>
+                      </>
                     )}
                   </div>
                 </div>
 
                 {/* Style Selection */}
-                {previewUrl && (
+                {previewUrls.length > 0 && (
                   <>
                     <div className="mb-6">
                       <h3 className="text-xl font-bold text-gray-900 mb-4">
@@ -620,6 +708,19 @@ export default function UserDashboard() {
                         ))}
                       </div>
                     </div>
+
+                    <div className="mb-8">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">
+                        4. Special Instructions (Optional)
+                      </h3>
+                      <textarea
+                        value={customNotes}
+                        onChange={(event) => setCustomNotes(event.target.value)}
+                        placeholder="Add any specific poses, props, or moods you'd like us to try."
+                        className="w-full rounded-2xl border border-gray-200 px-4 py-3 focus:border-blue-500 focus:outline-none"
+                        rows={3}
+                      />
+                    </div>
                   </>
                 )}
 
@@ -635,11 +736,16 @@ export default function UserDashboard() {
                 )}
 
                 {/* Generate Button */}
-                {previewUrl && (
+                {previewUrls.length > 0 && (
                   <div className="text-center">
                     <Button
                       onClick={handleGenerateImages}
-                      disabled={isGenerating || !subscription || subscription.imagesRemaining <= 0}
+                      disabled={
+                        isGenerating ||
+                        !subscription ||
+                        subscription.imagesRemaining <= 0 ||
+                        uploadedFiles.length === 0
+                      }
                       size="lg"
                       className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-12 py-6 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -651,13 +757,18 @@ export default function UserDashboard() {
                       ) : (
                         <>
                           <Sparkles className="w-6 h-6 mr-2" />
-                          Generate AI Portraits (1 credit)
+                          Generate AI Portraits
+                          <span className="ml-2 text-sm text-white/80">
+                            ({previewUrls.length}/{MAX_REFERENCE_PHOTOS} refs)
+                          </span>
                         </>
                       )}
                     </Button>
                     <p className="text-sm text-gray-600 mt-4">
                       {subscription?.imagesRemaining ? (
-                        <>{subscription.imagesRemaining} credits remaining • Generation takes 2-3 minutes</>
+                        <>
+                          {subscription.imagesRemaining} credits remaining • Generations take ~2-3 minutes
+                        </>
                       ) : (
                         <span className="text-red-600 font-semibold">No credits remaining - Please upgrade</span>
                       )}

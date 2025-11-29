@@ -188,15 +188,15 @@ export default function HeroSection() {
             Transform Your Pet Photos into Amazing Portraits
           </h1>
           <p className="mt-4 text-lg text-black text-center text-justify">
-            Create stunning pet portraits in seconds. Choose from dozens of styles, backgrounds, and accessories!
+            Instantly generate stunning portraits with unique styles and fun accessories
           </p>
           <div className="mt-8 flex justify-center">
-            <Link href="/try-free">
+            <Link href="/onboarding">
               <Button
                 size="lg"
                 className="w-full md:w-auto bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-lg px-8 py-6 font-bold shadow-xl"
               >
-                ✨ Try For FREE
+                ✨ Create Your Portrait
               </Button>
             </Link>
           </div>

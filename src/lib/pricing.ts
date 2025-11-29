@@ -24,18 +24,19 @@ export const PRICING_PLANS: Record<string, PricingPlan> = {
   starter: {
     id: 'starter',
     name: 'Starter',
-    price: 15, // $15
+    price: 29, // $29
     description: 'Perfect for a tryout',
     features: [
       '20 AI generated images',
-      '2 style options',
+      '4 style options',
       '2 background choices',
-      'HD resolution',
+      'Full HD resolution',
+      '15 min delivery',
     ],
     imageCount: 20,
-    styleOptions: 2,
+    styleOptions: 4,
     backgroundOptions: 2,
-    resolution: 'HD',
+    resolution: 'Full HD',
     accessories: false,
     customStyleRequests: false,
     commercialRights: false,
@@ -46,19 +47,19 @@ export const PRICING_PLANS: Record<string, PricingPlan> = {
   pro: {
     id: 'pro',
     name: 'Pro',
-    price: 29, // $29
+    price: 49, // $49
     description: 'Most popular choice',
     features: [
       '40 AI generated images',
       '8 style options',
       'All background choices',
       '2K resolution',
-      'Premium accessories',
-      'Priority support',
+      '4 Premium accessories',
+      '10 min delivery',
     ],
     imageCount: 40,
     styleOptions: 8,
-    backgroundOptions: 25,
+    backgroundOptions: 99,
     resolution: '2K',
     accessories: true,
     customStyleRequests: false,
@@ -67,10 +68,10 @@ export const PRICING_PLANS: Record<string, PricingPlan> = {
     popular: true,
     buttonText: 'Go Pro',
   },
-  max: {
-    id: 'max',
-    name: 'Max',
-    price: 49, // $49
+  ultra: {
+    id: 'ultra',
+    name: 'Ultra',
+    price: 79, // $79
     description: 'Best value package',
     features: [
       '100 AI generated images',
@@ -81,17 +82,18 @@ export const PRICING_PLANS: Record<string, PricingPlan> = {
       'Custom style requests',
       'Commercial usage rights',
       'Priority support',
+      '5 min delivery',
     ],
     imageCount: 100,
-    styleOptions: 15,
-    backgroundOptions: 25,
+    styleOptions: 99,
+    backgroundOptions: 99,
     resolution: '4K',
     accessories: true,
     customStyleRequests: true,
     commercialRights: true,
     prioritySupport: true,
     popular: false,
-    buttonText: 'Go Max',
+    buttonText: 'Go Ultra',
   },
 }
 

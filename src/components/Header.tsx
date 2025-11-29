@@ -71,10 +71,10 @@ export default function Header() {
               <Link href="/blog" className="text-gray-800 hover:text-gray-900 transition-colors">
                 Blog
               </Link>
-              <Link href="/try-free">
+              <Link href="/onboarding">
                 <Button variant="default" size="sm" className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700">
                   <span className="text-lg">✨</span>
-                  Try Free Now
+                  Create Your Portrait
                 </Button>
               </Link>
             </nav>
@@ -103,12 +103,12 @@ export default function Header() {
         >
           <nav className="container mx-auto px-4 py-4 space-y-4">
             <Link 
-              href="/try-free" 
+              href="/onboarding" 
               className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 transition-colors font-semibold"
               onClick={() => setIsMenuOpen(false)}
             >
               <span className="text-xl">✨</span>
-              <span className="font-medium">Try Free Now</span>
+              <span className="font-medium">Create Your Portrait</span>
             </Link>
             <Link 
               href="#how-it-works" 

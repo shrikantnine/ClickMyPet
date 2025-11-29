@@ -61,7 +61,7 @@ export default function ExitIntentPopup() {
                 Wait! Don't Go! 🎁
               </h2>
               <p className="text-xl text-gray-700 mb-6">
-                Get an <span className="text-5xl font-black text-orange-500">EXTRA 20% OFF</span>
+                Get an <span className="text-5xl font-black text-orange-500">EXTRA 10% OFF</span>
               </p>
               <p className="text-lg text-gray-600">
                 Stack with existing discounts!
@@ -72,26 +72,23 @@ export default function ExitIntentPopup() {
             <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl p-6 mb-6 border-2 border-orange-200">
               <div className="grid grid-cols-3 gap-4 text-center mb-4">
                 <div>
-                  <div className="text-sm text-gray-500 line-through">$20</div>
-                  <div className="text-lg font-bold text-gray-700 line-through">$15</div>
-                  <div className="text-2xl font-black text-orange-600">$12</div>
+                  <div className="text-sm text-gray-500 line-through">$29</div>
+                  <div className="text-2xl font-black text-orange-600">$26</div>
                   <div className="text-xs text-gray-600 mt-1">Starter</div>
                 </div>
                 <div className="border-l-2 border-r-2 border-orange-200">
-                  <div className="text-sm text-gray-500 line-through">$40</div>
-                  <div className="text-lg font-bold text-gray-700 line-through">$29</div>
-                  <div className="text-2xl font-black text-orange-600">$23</div>
+                  <div className="text-sm text-gray-500 line-through">$49</div>
+                  <div className="text-2xl font-black text-orange-600">$44</div>
                   <div className="text-xs text-gray-600 mt-1">Pro</div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-500 line-through">$80</div>
-                  <div className="text-lg font-bold text-gray-700 line-through">$49</div>
-                  <div className="text-2xl font-black text-orange-600">$39</div>
-                  <div className="text-xs text-gray-600 mt-1">Max</div>
+                  <div className="text-sm text-gray-500 line-through">$79</div>
+                  <div className="text-2xl font-black text-orange-600">$71</div>
+                  <div className="text-xs text-gray-600 mt-1">Ultra</div>
                 </div>
               </div>
               <div className="text-sm font-semibold text-orange-700">
-                Use code: <span className="bg-white px-3 py-1 rounded-full font-mono">SAVE20</span>
+                Use code: <span className="bg-white px-3 py-1 rounded-full font-mono">SAVE10</span>
               </div>
             </div>
 
@@ -103,7 +100,7 @@ export default function ExitIntentPopup() {
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white text-xl py-6"
                   onClick={() => setShowPopup(false)}
                 >
-                  Claim My 20% OFF Now! 🚀
+                  Claim My 10% OFF Now! 🚀
                 </Button>
               </Link>
               <button

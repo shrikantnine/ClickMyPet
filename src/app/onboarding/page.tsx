@@ -1,11 +1,19 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { Check, ArrowRight, ArrowLeft } from 'lucide-react'
+import { Check, ArrowRight, ArrowLeft, Lock, Zap } from 'lucide-react'
 import ProgressBar from '@/components/ProgressBar'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+
+// Plan limits
+const PLAN_LIMITS: Record<string, { styles: number; backgrounds: number; accessories: number }> = {
+  starter: { styles: 4, backgrounds: 2, accessories: 0 },
+  pro: { styles: 8, backgrounds: 99, accessories: 4 }, // 99 means all
+  ultra: { styles: 99, backgrounds: 99, accessories: 99 },
+}
 
 // Style options
 const styles = [
@@ -44,22 +52,55 @@ const accessories = [
 ]
 
 export default function OnboardingPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OnboardingContent />
+    </Suspense>
+  )
+}
+
+function OnboardingContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [planId, setPlanId] = useState(searchParams.get('plan') || 'starter')
+  const limits = PLAN_LIMITS[planId] || PLAN_LIMITS.starter
+
   const [step, setStep] = useState(1)
   const [selectedStyles, setSelectedStyles] = useState<string[]>([])
   const [selectedBackgrounds, setSelectedBackgrounds] = useState<string[]>([])
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([])
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [upgradeReason, setUpgradeReason] = useState('')
 
   const toggleSelection = (
     id: string,
     current: string[],
-    setter: (value: string[]) => void
+    setter: (value: string[]) => void,
+    limit: number,
+    type: 'styles' | 'backgrounds' | 'accessories'
   ) => {
     if (current.includes(id)) {
       setter(current.filter((item) => item !== id))
     } else {
-      setter([...current, id])
+      if (current.length < limit) {
+        setter([...current, id])
+      } else {
+        // Trigger upsell modal
+        setUpgradeReason(type)
+        setShowUpgradeModal(true)
+      }
     }
+  }
+
+  const handleUpgrade = () => {
+    // Upgrade logic: switch to next tier
+    const nextPlan = planId === 'starter' ? 'pro' : 'ultra'
+    setPlanId(nextPlan)
+    setShowUpgradeModal(false)
+    // Update URL without reload
+    const newUrl = new URL(window.location.href)
+    newUrl.searchParams.set('plan', nextPlan)
+    window.history.pushState({}, '', newUrl)
   }
 
   const handleNext = () => {
@@ -86,13 +127,14 @@ export default function OnboardingPage() {
         styles: selectedStyles,
         backgrounds: selectedBackgrounds,
         accessories: selectedAccessories,
+        plan: planId,
       }
       
       // Store in session storage for now
       sessionStorage.setItem('userPreferences', JSON.stringify(preferences))
       
       // Redirect to checkout
-      router.push('/checkout')
+      router.push(`/checkout?plan=${planId}`)
     } catch (error) {
       console.error('Error saving preferences:', error)
     }
@@ -135,12 +177,12 @@ export default function OnboardingPage() {
         {/* Step 1: Select Styles */}
         {step === 1 && (
           <div className="space-y-6">
-            <div className="text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+            <div className="text-center sticky top-20 z-40 bg-white/90 backdrop-blur py-2 rounded-lg shadow-sm mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
                 Choose Your Favorite Styles
               </h1>
               <p className="text-lg text-gray-700">
-                Select one or more styles you'd like for your pet photos
+                Selected: <span className="font-bold text-blue-600">{selectedStyles.length}</span> / {limits.styles}
               </p>
             </div>
 
@@ -149,9 +191,9 @@ export default function OnboardingPage() {
                 <div
                   key={style.id}
                   onClick={() =>
-                    toggleSelection(style.id, selectedStyles, setSelectedStyles)
+                    toggleSelection(style.id, selectedStyles, setSelectedStyles, limits.styles, 'styles')
                   }
-                  className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 ${
+                  className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 group ${
                     selectedStyles.includes(style.id)
                       ? 'border-blue-600 shadow-xl scale-105'
                       : 'border-transparent hover:border-blue-300'
@@ -165,14 +207,14 @@ export default function OnboardingPage() {
                     loading="lazy"
                     className="w-full h-64 object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-white font-semibold text-center">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                    <p className="text-white font-semibold text-center text-sm md:text-base">
                       {style.name}
                     </p>
                   </div>
                   {selectedStyles.includes(style.id) && (
-                    <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
                       <Check className="w-5 h-5 text-white" />
                     </div>
                   )}
@@ -185,12 +227,12 @@ export default function OnboardingPage() {
         {/* Step 2: Select Backgrounds */}
         {step === 2 && (
           <div className="space-y-6">
-            <div className="text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+            <div className="text-center sticky top-20 z-40 bg-white/90 backdrop-blur py-2 rounded-lg shadow-sm mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
                 Pick Your Backgrounds
               </h1>
               <p className="text-lg text-gray-700">
-                Choose the backgrounds you'd like for your pet photos
+                Selected: <span className="font-bold text-blue-600">{selectedBackgrounds.length}</span> / {limits.backgrounds === 99 ? 'All' : limits.backgrounds}
               </p>
             </div>
 
@@ -202,10 +244,12 @@ export default function OnboardingPage() {
                     toggleSelection(
                       bg.id,
                       selectedBackgrounds,
-                      setSelectedBackgrounds
+                      setSelectedBackgrounds,
+                      limits.backgrounds,
+                      'backgrounds'
                     )
                   }
-                  className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-6 ${
+                  className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-6 group ${
                     selectedBackgrounds.includes(bg.id)
                       ? 'border-blue-600 shadow-xl scale-105'
                       : 'border-gray-300 hover:border-blue-300'
@@ -213,12 +257,12 @@ export default function OnboardingPage() {
                   style={{ backgroundColor: bg.preview }}
                 >
                   <div className="h-32 flex items-center justify-center">
-                    <p className="text-white font-bold text-xl text-center drop-shadow-lg">
+                    <p className="text-white font-bold text-xl text-center drop-shadow-lg group-hover:scale-110 transition-transform">
                       {bg.name}
                     </p>
                   </div>
                   {selectedBackgrounds.includes(bg.id) && (
-                    <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
                       <Check className="w-5 h-5 text-white" />
                     </div>
                   )}
@@ -231,49 +275,107 @@ export default function OnboardingPage() {
         {/* Step 3: Select Accessories */}
         {step === 3 && (
           <div className="space-y-6">
-            <div className="text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+            <div className="text-center sticky top-20 z-40 bg-white/90 backdrop-blur py-2 rounded-lg shadow-sm mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
                 Add Fun Accessories
               </h1>
               <p className="text-lg text-gray-700">
-                Optional: Select accessories to add personality (skip if you prefer natural)
+                Selected: <span className="font-bold text-blue-600">{selectedAccessories.length}</span> / {limits.accessories === 99 ? 'All' : limits.accessories}
               </p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-              {accessories.map((accessory) => (
-                <div
-                  key={accessory.id}
-                  onClick={() =>
-                    toggleSelection(
-                      accessory.id,
-                      selectedAccessories,
-                      setSelectedAccessories
-                    )
-                  }
-                  className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-8 bg-white ${
-                    selectedAccessories.includes(accessory.id)
-                      ? 'border-blue-600 shadow-xl scale-105'
-                      : 'border-gray-300 hover:border-blue-300'
-                  }`}
-                >
-                  <div className="text-center">
-                    <div className="text-5xl mb-3">{accessory.emoji}</div>
-                    <p className="font-semibold text-gray-800">
-                      {accessory.name}
-                    </p>
-                  </div>
-                  {selectedAccessories.includes(accessory.id) && (
-                    <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                      <Check className="w-5 h-5 text-white" />
+              {accessories.map((accessory) => {
+                const isLocked = limits.accessories === 0
+                return (
+                  <div
+                    key={accessory.id}
+                    onClick={() =>
+                      toggleSelection(
+                        accessory.id,
+                        selectedAccessories,
+                        setSelectedAccessories,
+                        limits.accessories,
+                        'accessories'
+                      )
+                    }
+                    className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-8 bg-white group ${
+                      selectedAccessories.includes(accessory.id)
+                        ? 'border-blue-600 shadow-xl scale-105'
+                        : 'border-gray-300 hover:border-blue-300'
+                    } ${isLocked ? 'opacity-75 hover:opacity-100' : ''}`}
+                  >
+                    <div className="text-center">
+                      <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">{accessory.emoji}</div>
+                      <p className="font-semibold text-gray-800">
+                        {accessory.name}
+                      </p>
                     </div>
-                  )}
-                </div>
-              ))}
+                    
+                    {/* Selection Indicator */}
+                    {selectedAccessories.includes(accessory.id) && (
+                      <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
+                        <Check className="w-5 h-5 text-white" />
+                      </div>
+                    )}
+
+                    {/* Lock Icon for Starter Plan */}
+                    {isLocked && (
+                      <div className="absolute inset-0 bg-gray-100/50 flex items-center justify-center backdrop-blur-[1px]">
+                        <div className="bg-white p-2 rounded-full shadow-lg">
+                          <Lock className="w-6 h-6 text-gray-400" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}
       </div>
+
+      {/* Upgrade Modal */}
+      <Dialog open={showUpgradeModal} onOpenChange={setShowUpgradeModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl">
+              <Zap className="w-6 h-6 text-yellow-500 fill-current" />
+              Unlock More Possibilities!
+            </DialogTitle>
+            <DialogDescription className="pt-2 text-base">
+              {upgradeReason === 'accessories' 
+                ? "Accessories are only available on Pro and Ultra plans. Upgrade now to add fun props to your pet's portraits!"
+                : `You've reached the limit for your current plan. Upgrade to unlock more ${upgradeReason} and get faster delivery!`}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="bg-blue-50 p-4 rounded-lg my-2">
+            <h4 className="font-semibold text-blue-900 mb-2">Upgrade to Pro & Get:</h4>
+            <ul className="space-y-2 text-sm text-blue-800">
+              <li className="flex items-center gap-2">
+                <Check className="w-4 h-4" /> 40 AI Images (vs 20)
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-4 h-4" /> 8 Styles & All Backgrounds
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-4 h-4" /> Premium Accessories
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-4 h-4" /> 10 Min Delivery
+              </li>
+            </ul>
+          </div>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => setShowUpgradeModal(false)}>
+              Maybe Later
+            </Button>
+            <Button onClick={handleUpgrade} className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
+              Upgrade for just $20 more
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Sticky Bottom Navigation */}
       <div className="bg-white border-t border-gray-200 sticky bottom-0 z-50 shadow-xl">

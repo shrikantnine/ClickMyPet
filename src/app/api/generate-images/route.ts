@@ -13,6 +13,7 @@ import {
   waitForCompletion,
   getOptimalParameters,
   estimateGenerationTime,
+  getPlanModelConfig,
   type FluxGenerationRequest 
 } from '@/lib/blackforest-api'
 import { trackImageGeneration } from '@/lib/analytics'
@@ -47,9 +48,21 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body = await request.json()
-    const { selections, numImages } = body as {
+    const { selections, numImages, petPhotos } = body as {
       selections: UserSelections
       numImages?: number
+      petPhotos?: string[]
+    }
+
+    const sanitizedPetPhotos = Array.isArray(petPhotos)
+      ? petPhotos.filter(photo => typeof photo === 'string' && photo.trim().length > 0).slice(0, 5)
+      : []
+
+    if (sanitizedPetPhotos.length === 0) {
+      return NextResponse.json(
+        { error: 'Please upload at least one reference photo of your pet.' },
+        { status: 400 }
+      )
     }
 
     // Validate selections
@@ -93,10 +106,13 @@ export async function POST(request: NextRequest) {
     )
 
     // Build prompts
-    const promptVariations = generatePromptVariations(selections, imagesToGenerate)
+    const promptVariations = generatePromptVariations(selections, imagesToGenerate, {
+      planId: subscription.plan_id,
+    })
 
     // Get optimal parameters based on plan
     const optimalParams = getOptimalParameters(subscription.plan_id)
+    const planModelConfig = getPlanModelConfig(subscription.plan_id)
 
     // Estimate generation time
     const estimatedTime = estimateGenerationTime(
@@ -104,16 +120,28 @@ export async function POST(request: NextRequest) {
       optimalParams.num_inference_steps
     )
 
+    const referenceWindowSize = Math.max(1, Math.min(planModelConfig.maxImagesPerJob, sanitizedPetPhotos.length))
+    const pickReferenceImages = (index: number) => {
+      const refs: string[] = []
+      for (let i = 0; i < referenceWindowSize; i++) {
+        const photoIndex = (index * referenceWindowSize + i) % sanitizedPetPhotos.length
+        refs.push(sanitizedPetPhotos[photoIndex])
+      }
+      return refs
+    }
+
     // Start generation jobs
     const generationJobs = []
     
-    for (const variation of promptVariations) {
+    for (const [idx, variation] of promptVariations.entries()) {
+      const referenceImages = pickReferenceImages(idx)
       const generationRequest: FluxGenerationRequest = {
         ...optimalParams,
         prompt: variation.prompt,
         negative_prompt: variation.negativePrompt,
         seed: variation.seed,
         num_images: 1,
+        reference_images: referenceImages.map(url => ({ url })),
       }
 
       try {
@@ -122,6 +150,7 @@ export async function POST(request: NextRequest) {
           jobId: job.id,
           prompt: variation.prompt,
           status: 'pending',
+          referenceImages,
         })
       } catch (error) {
         console.error('Failed to start generation job:', error)
@@ -149,7 +178,10 @@ export async function POST(request: NextRequest) {
         prompt: promptVariations[0].prompt,
         negative_prompt: promptVariations[0].negativePrompt,
         status: 'processing',
-        generation_params: optimalParams,
+        generation_params: {
+          ...optimalParams,
+          pet_photos: sanitizedPetPhotos,
+        },
         jobs_data: generationJobs,
       })
       .select()

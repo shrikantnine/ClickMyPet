@@ -1,6 +1,11 @@
 // Black Forest Labs Flux API Integration
 // Documentation: https://docs.bfl.ml/
 
+export interface FluxReferenceImage {
+  url: string
+  weight?: number
+}
+
 export interface FluxGenerationRequest {
   prompt: string
   negative_prompt?: string
@@ -12,6 +17,9 @@ export interface FluxGenerationRequest {
   seed?: number
   safety_tolerance?: number
   output_format?: 'jpeg' | 'png'
+  model?: string
+  character_lock?: boolean
+  reference_images?: FluxReferenceImage[]
 }
 
 export interface FluxGenerationResponse {
@@ -29,15 +37,86 @@ export interface GenerationJob {
   jobId: string
   status: 'queued' | 'processing' | 'completed' | 'failed'
   images?: string[]
+  referenceImages?: string[]
   error?: string
   createdAt: Date
   completedAt?: Date
+}
+
+export type PlanTier = 'starter' | 'pro' | 'ultra' | 'max'
+
+export interface FluxModelConfig {
+  model: string
+  width: number
+  height: number
+  steps: number
+  guidance: number
+  output: 'jpeg' | 'png'
+  characterLock: boolean
+  maxImagesPerJob: number
+}
+
+// Central map that ties subscription tiers to Flux endpoints, resolutions, and
+// whether we should send character-lock metadata (multi-photo references).
+const PLAN_MODEL_CONFIG: Record<PlanTier, FluxModelConfig> = {
+  starter: {
+    model: 'flux-pro-1.1',
+    width: 1024,
+    height: 1024,
+    steps: 32,
+    guidance: 6.8,
+    output: 'jpeg',
+    characterLock: false,
+    maxImagesPerJob: 1,
+  },
+  pro: {
+    model: 'flux-pro-1.1-cp',
+    width: 1536,
+    height: 1536,
+    steps: 45,
+    guidance: 7.4,
+    output: 'jpeg',
+    characterLock: true,
+    maxImagesPerJob: 2,
+  },
+  ultra: {
+    model: 'flux-ultra-1.1',
+    width: 2048,
+    height: 2048,
+    steps: 60,
+    guidance: 8.2,
+    output: 'png',
+    characterLock: true,
+    maxImagesPerJob: 3,
+  },
+  max: {
+    model: 'flux-ultra-1.1',
+    width: 2048,
+    height: 2048,
+    steps: 60,
+    guidance: 8.2,
+    output: 'png',
+    characterLock: true,
+    maxImagesPerJob: 3,
+  },
 }
 
 // Rate limiting configuration
 const RATE_LIMIT_CONFIG = {
   maxRequestsPerMinute: 10,
   maxConcurrentJobs: 5,
+}
+
+function resolvePlanTier(planId: string): PlanTier {
+  if (planId === 'pro') return 'pro'
+  if (planId === 'ultra') return 'ultra'
+  if (planId === 'max') return 'max'
+  return 'starter'
+}
+
+export function getPlanModelConfig(planId: string): FluxModelConfig {
+  const tier = resolvePlanTier(planId)
+  return PLAN_MODEL_CONFIG[tier]
 }
 
 let requestCount = 0
@@ -95,17 +174,30 @@ export async function generateImages(
     seed: request.seed,
     safety_tolerance: request.safety_tolerance || 2,
     output_format: request.output_format || 'jpeg',
+    model: request.model,
+    character_lock: request.character_lock,
+    reference_images: request.reference_images,
   }
   
   try {
-    // Call Black Forest Labs API
-    const response = await fetch('https://api.bfl.ml/v1/flux-pro-1.1', {
+    const { model, reference_images, ...payload } = params
+    const endpoint = model || 'flux-pro-1.1'
+
+    if (reference_images && reference_images.length > 0) {
+      ;(payload as any).reference_images = reference_images.map(image => ({
+        url: image.url,
+        weight: image.weight ?? 0.6,
+      }))
+    }
+
+    // Call Black Forest Labs API with plan-specific endpoint
+    const response = await fetch(`https://api.bfl.ml/v1/${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-Key': apiKey,
       },
-      body: JSON.stringify(params),
+      body: JSON.stringify(payload),
     })
     
     if (!response.ok) {
@@ -324,34 +416,15 @@ export function estimateGenerationTime(
  * @returns Recommended generation parameters
  */
 export function getOptimalParameters(planId: string): Partial<FluxGenerationRequest> {
-  switch (planId) {
-    case 'starter':
-      return {
-        width: 1024,
-        height: 1024,
-        num_inference_steps: 30,
-        guidance_scale: 7.0,
-      }
-    case 'pro':
-      return {
-        width: 1536,
-        height: 1536,
-        num_inference_steps: 50,
-        guidance_scale: 7.5,
-      }
-    case 'max':
-      return {
-        width: 2048,
-        height: 2048,
-        num_inference_steps: 75,
-        guidance_scale: 8.0,
-      }
-    default:
-      return {
-        width: 1024,
-        height: 1024,
-        num_inference_steps: 50,
-        guidance_scale: 7.5,
-      }
+  const config = getPlanModelConfig(planId)
+
+  return {
+    width: config.width,
+    height: config.height,
+    num_inference_steps: config.steps,
+    guidance_scale: config.guidance,
+    output_format: config.output,
+    model: config.model,
+    character_lock: config.characterLock,
   }
 }

@@ -6,6 +6,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { getPlanById, type PricingPlan } from '@/lib/pricing'
+import { mergePlanMetadata } from '@/lib/subscription-orchestrator'
+import { trackSubscription } from '@/lib/analytics'
 
 export async function POST(request: NextRequest) {
   try {
@@ -90,21 +93,70 @@ export async function POST(request: NextRequest) {
 
 async function handlePaymentSuccess(supabase: any, payment: any) {
   try {
-    const { error } = await supabase
+    const { data: paymentRecord, error: fetchError } = await supabase
+      .from('payments')
+      .select('*')
+      .eq('razorpay_order_id', payment.order_id)
+      .single()
+
+    if (fetchError || !paymentRecord) {
+      console.error('Payment record not found for webhook:', fetchError)
+      return
+    }
+
+    const plan = getPlanById(paymentRecord.plan_id)
+    if (!plan) {
+      console.error('Plan referenced in payment is invalid:', paymentRecord.plan_id)
+      return
+    }
+
+    const metadataWithPlan = mergePlanMetadata(paymentRecord.metadata, plan)
+    const enrichedMetadata = {
+      ...metadataWithPlan,
+      razorpayPayment: payment,
+      lastWebhookSyncAt: new Date().toISOString(),
+    }
+
+    const { error: updateError } = await supabase
       .from('payments')
       .update({
         status: 'paid',
         razorpay_payment_id: payment.id,
         payment_method: payment.method,
-        metadata: payment,
+        metadata: enrichedMetadata,
       })
-      .eq('razorpay_order_id', payment.order_id)
+      .eq('id', paymentRecord.id)
 
-    if (error) {
-      console.error('Error updating payment:', error)
-    } else {
-      console.log('Payment marked as paid:', payment.id)
+    if (updateError) {
+      console.error('Error updating payment via webhook:', updateError)
+      return
     }
+
+    if (!enrichedMetadata.subscriptionId) {
+      const subscriptionId = await createSubscriptionForPayment(supabase, paymentRecord, plan)
+
+      if (subscriptionId) {
+        enrichedMetadata.subscriptionId = subscriptionId
+        enrichedMetadata.subscriptionSource = 'webhook'
+        enrichedMetadata.lastSubscriptionSync = new Date().toISOString()
+
+        const { error: metadataError } = await supabase
+          .from('payments')
+          .update({ metadata: enrichedMetadata })
+          .eq('id', paymentRecord.id)
+
+        if (metadataError) {
+          console.error('Failed to persist subscription metadata from webhook:', metadataError)
+        }
+
+        await trackSubscription(paymentRecord.user_id, 'created', plan.id, {
+          source: 'webhook-recovery',
+          paymentId: paymentRecord.id,
+        })
+      }
+    }
+
+    console.log('Payment marked as paid via webhook:', payment.id)
   } catch (error) {
     console.error('Error in handlePaymentSuccess:', error)
   }
@@ -184,5 +236,38 @@ async function handleRefundProcessed(supabase: any, refund: any) {
     }
   } catch (error) {
     console.error('Error in handleRefundProcessed:', error)
+  }
+}
+
+async function createSubscriptionForPayment(
+  supabase: any,
+  paymentRecord: any,
+  plan: PricingPlan
+) {
+  try {
+    const { data: subscriptionId, error } = await supabase
+      .rpc('create_subscription_from_payment', {
+        p_user_id: paymentRecord.user_id,
+        p_payment_id: paymentRecord.id,
+        p_plan_id: plan.id,
+        p_images_total: plan.imageCount,
+        p_style_options: plan.styleOptions,
+        p_background_options: plan.backgroundOptions,
+        p_resolution: plan.resolution,
+        p_has_accessories: plan.accessories,
+        p_has_custom_requests: plan.customStyleRequests,
+        p_has_commercial_rights: plan.commercialRights,
+        p_has_priority_support: plan.prioritySupport,
+      })
+
+    if (error) {
+      console.error('Failed to create subscription from webhook:', error)
+      return null
+    }
+
+    return subscriptionId
+  } catch (error) {
+    console.error('Unexpected error creating subscription from webhook:', error)
+    return null
   }
 }

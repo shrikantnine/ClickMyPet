@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Users, Download, Search, Filter, TrendingUp, Globe, MousePointer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import AdminHeader from '@/components/AdminHeader'
 
 interface Visitor {
   id: string
@@ -174,14 +175,13 @@ export default function VisitorsAnalytics() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <AdminHeader />
+      
       {/* Header */}
       <div className="bg-gray-800 border-b border-gray-700 p-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <Users className="w-8 h-8 text-purple-500" />
-              <h1 className="text-3xl font-bold">Visitor Analytics</h1>
-            </div>
+            <h2 className="text-2xl font-bold">Visitor Analytics</h2>
             
             <Button
               onClick={handleExportCSV}

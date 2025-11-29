@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { BarChart, TrendingUp, Users, DollarSign, Image, Package, Palette, Sparkles, Settings as SettingsIcon } from 'lucide-react'
+import { BarChart, TrendingUp, Users, DollarSign, Image, Package, Palette, Sparkles } from 'lucide-react'
 import Link from 'next/link'
+import AdminHeader from '@/components/AdminHeader'
 
 interface PlatformStats {
   totalUsers: number
@@ -148,39 +149,20 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 p-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <BarChart className="w-8 h-8 text-blue-500" />
-            <h1 className="text-3xl font-bold">Click My Pet Admin Dashboard</h1>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin/settings"
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg border border-gray-600 flex items-center gap-2 transition"
-            >
-              <SettingsIcon className="w-4 h-4" />
-              <span>Settings</span>
-            </Link>
-            <Link
-              href="/admin/visitors"
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center gap-2 transition"
-            >
-              <Users className="w-4 h-4" />
-              <span>Visitors</span>
-            </Link>
+      <AdminHeader />
+      
+      {/* Period Selector */}
+      <div className="bg-gray-800 border-b border-gray-700 p-4">
+        <div className="max-w-7xl mx-auto flex justify-end">
             <select
               value={period}
               onChange={(e) => setPeriod(parseInt(e.target.value))}
-              className="px-4 py-2 bg-gray-700 rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 bg-gray-700 rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500 text-white"
             >
               <option value={7}>Last 7 days</option>
               <option value={30}>Last 30 days</option>
               <option value={90}>Last 90 days</option>
             </select>
-          </div>
         </div>
       </div>
 

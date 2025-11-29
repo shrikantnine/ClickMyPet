@@ -420,6 +420,7 @@ export async function getPlanDistribution() {
       return [
         { plan: 'starter', count: 0 },
         { plan: 'pro', count: 0 },
+        { plan: 'ultra', count: 0 },
         { plan: 'max', count: 0 },
       ]
     }
@@ -427,6 +428,7 @@ export async function getPlanDistribution() {
     const distribution: Record<string, number> = {
       starter: 0,
       pro: 0,
+      ultra: 0,
       max: 0
     }
     
@@ -443,6 +445,7 @@ export async function getPlanDistribution() {
     return [
       { plan: 'starter', count: 0 },
       { plan: 'pro', count: 0 },
+      { plan: 'ultra', count: 0 },
       { plan: 'max', count: 0 },
     ]
   }

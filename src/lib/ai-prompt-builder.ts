@@ -26,6 +26,15 @@ export interface BackgroundDefinition {
   environment: string
 }
 
+type DiversityPlan = 'pro' | 'ultra' | 'max'
+
+interface DiversityPreset {
+  frequency: number // Inject diversity every Nth prompt
+  stylePool: string[]
+  backgroundPool: string[]
+  accessoryPool: string[]
+}
+
 // Comprehensive style definitions for different artistic approaches
 export const STYLE_DEFINITIONS: Record<string, StyleDefinition> = {
   'professional-portrait': {
@@ -206,6 +215,29 @@ export const ACCESSORY_DEFINITIONS: Record<string, string> = {
   'collar': 'wearing a decorative collar',
 }
 
+// Inject extra creative directions for higher-tier plans to ensure users get
+// noticeably different looks without having to tweak every knob manually.
+const DIVERSITY_PRESETS: Record<DiversityPlan, DiversityPreset> = {
+  pro: {
+    frequency: 3,
+    stylePool: ['professional-portrait', 'watercolor-art', 'vintage-film', 'oil-painting'],
+    backgroundPool: ['nature-garden', 'mountain-landscape', 'urban-city', 'autumn-forest'],
+    accessoryPool: ['bow-tie', 'flower-crown', 'sunglasses'],
+  },
+  ultra: {
+    frequency: 2,
+    stylePool: ['professional-portrait', 'watercolor-art', 'cyberpunk', 'renaissance', 'minimalist', 'disney-pixar'],
+    backgroundPool: ['fantasy-magical', 'beach-sunset', 'mountain-landscape', 'cozy-home'],
+    accessoryPool: ['crown', 'bandana', 'hat', 'scarf'],
+  },
+  max: {
+    frequency: 2,
+    stylePool: ['professional-portrait', 'watercolor-art', 'cyberpunk', 'renaissance', 'minimalist', 'disney-pixar'],
+    backgroundPool: ['fantasy-magical', 'beach-sunset', 'mountain-landscape', 'cozy-home'],
+    accessoryPool: ['crown', 'bandana', 'hat', 'scarf'],
+  },
+}
+
 // Pet breed specific characteristics for better accuracy
 export const BREED_CHARACTERISTICS: Record<string, string> = {
   // Dogs
@@ -350,9 +382,14 @@ export function buildNegativePrompt(selections: UserSelections): string {
  * @param count Number of variations to generate
  * @returns Array of prompt objects
  */
+export interface PromptVariationOptions {
+  planId?: string
+}
+
 export function generatePromptVariations(
   selections: UserSelections,
-  count: number
+  count: number,
+  options: PromptVariationOptions = {}
 ): Array<{ prompt: string; negativePrompt: string; seed?: number }> {
   const variations = []
   
@@ -375,8 +412,9 @@ export function generatePromptVariations(
   ]
   
   for (let i = 0; i < count; i++) {
-    const basePrompt = buildPrompt(selections)
-    const negativePrompt = buildNegativePrompt(selections)
+    const diversifiedSelections = applyAutomaticDiversity(selections, options.planId, i)
+    const basePrompt = buildPrompt(diversifiedSelections)
+    const negativePrompt = buildNegativePrompt(diversifiedSelections)
     
     // Add variation elements
     const qualityMod = qualityVariations[i % qualityVariations.length]
@@ -392,6 +430,60 @@ export function generatePromptVariations(
   }
   
   return variations
+}
+
+function applyAutomaticDiversity(
+  selections: UserSelections,
+  planId: string | undefined,
+  iteration: number
+): UserSelections {
+  const preset = getDiversityPreset(planId)
+  if (!preset || preset.frequency <= 0) {
+    return selections
+  }
+
+  const shouldInject = ((iteration + 1) % preset.frequency) === 0
+  if (!shouldInject) {
+    return selections
+  }
+
+  const variant: UserSelections = {
+    ...selections,
+    accessories: selections.accessories ? [...selections.accessories] : [],
+  }
+
+  const styleCandidate = pickFromPool(preset.stylePool, iteration)
+  if (styleCandidate && STYLE_DEFINITIONS[styleCandidate]) {
+    variant.style = styleCandidate
+  }
+
+  const backgroundCandidate = pickFromPool(preset.backgroundPool, iteration + 1)
+  if (backgroundCandidate && BACKGROUND_DEFINITIONS[backgroundCandidate]) {
+    variant.background = backgroundCandidate
+  }
+
+  const accessoryCandidate = pickFromPool(preset.accessoryPool, iteration + 2)
+  if (accessoryCandidate && ACCESSORY_DEFINITIONS[accessoryCandidate]) {
+    const accessoriesSet = new Set(variant.accessories || [])
+    accessoriesSet.add(accessoryCandidate)
+    variant.accessories = Array.from(accessoriesSet)
+  }
+
+  return variant
+}
+
+function getDiversityPreset(planId?: string): DiversityPreset | null {
+  if (!planId) return null
+  if (planId === 'pro' || planId === 'ultra' || planId === 'max') {
+    return DIVERSITY_PRESETS[planId]
+  }
+  return null
+}
+
+function pickFromPool(pool: string[], index: number): string | null {
+  if (!pool.length) return null
+  const normalizedIndex = Math.abs(index) % pool.length
+  return pool[normalizedIndex]
 }
 
 /**
