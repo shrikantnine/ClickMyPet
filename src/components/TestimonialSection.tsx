@@ -96,7 +96,7 @@ export default function TestimonialSection() {
         <div className="block md:hidden">
           <div className="flex flex-col items-center">
             <div
-              className="w-full max-w-md mx-auto bg-white rounded-2xl p-6 shadow-lg border border-gray-100 flex flex-col relative overflow-hidden"
+              className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col relative overflow-hidden"
               style={{
                 backgroundImage: `url('/Testimonial/Click My Pet Testimonial ${testimonials[current].name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
                 backgroundSize: 'cover',
@@ -105,29 +105,28 @@ export default function TestimonialSection() {
               }}
             >
               <div className="absolute inset-0 bg-white/80" />
-              <div className="relative z-10 flex flex-col h-full">
-                {/* Testimonial Text */}
-                <p className="text-gray-700 mb-4 leading-relaxed">
+              {/* Top 65%: Testimonial Text */}
+              <div className="relative z-10 p-6" style={{ minHeight: '65%' }}>
+                <p className="text-gray-700 leading-relaxed">
                   &quot;{testimonials[current].text}&quot;
                 </p>
-                <div className="flex-grow" />
-                {/* Bottom section: border, stars, name, pet */}
-                <div className="border-t border-gray-200 pt-4 mt-auto w-full">
-                  <div className="flex flex-col items-start">
-                    <div className="flex mb-2">
-                      {[...Array(testimonials[current].rating)].map((_, i) => (
-                        <svg
-                          key={i}
-                          className="w-5 h-5 text-yellow-400 fill-current"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="font-semibold text-gray-900">{testimonials[current].name}</p>
-                    <p className="text-sm text-gray-500">{testimonials[current].pet}</p>
+              </div>
+              {/* Bottom 35%: Border line, stars, name, pet */}
+              <div className="relative z-10 border-t border-gray-200 px-6 pt-4 pb-6 mt-auto w-full" style={{ minHeight: '35%' }}>
+                <div className="flex flex-col items-start">
+                  <div className="flex mb-2">
+                    {[...Array(testimonials[current].rating)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className="w-5 h-5 text-yellow-400 fill-current"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
                   </div>
+                  <p className="font-semibold text-gray-900">{testimonials[current].name}</p>
+                  <p className="text-sm text-gray-500">{testimonials[current].pet}</p>
                 </div>
               </div>
               {/* Progress Bar */}

@@ -62,7 +62,7 @@ export default function GallerySection() {
   return (
     <section 
       id="gallery"
-      className="w-screen h-[140vh] bg-gray-50 overflow-hidden flex flex-col"
+      className="w-screen h-auto md:h-[140vh] bg-gray-50 overflow-hidden flex flex-col"
     >
       <div className="container mx-auto px-4 py-8 flex-shrink-0">
         <div className="text-center">
@@ -76,11 +76,11 @@ export default function GallerySection() {
       </div>
 
       {/* Gallery Marquee Rows */}
-      <div className="flex-1 w-full h-full overflow-hidden flex flex-col gap-2">
+      <div className="flex-1 w-full overflow-hidden flex flex-col gap-2">
         {galleryRows.map((row, rowIndex) => (
           <div 
             key={rowIndex}
-            className="flex-1 w-full h-full"
+            className="w-full min-h-[32vh] md:flex-1 md:min-h-0"
           >
             <Marquee
               speed={42}
