@@ -370,7 +370,7 @@ function OnboardingContent() {
             <Button variant="outline" onClick={() => setShowUpgradeModal(false)}>
               Maybe Later
             </Button>
-            <Button onClick={handleUpgrade} className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
+            <Button onClick={handleUpgrade} variant="moody-fill" className="border-0">
               Upgrade for just $20 more
             </Button>
           </DialogFooter>
@@ -405,8 +405,9 @@ function OnboardingContent() {
             <Button
               onClick={handleNext}
               disabled={!canProceed()}
+              variant="moody-fill"
               size="lg"
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+              className="flex items-center gap-2"
             >
               {step === 3 ? 'Continue to Checkout' : 'Next'}
               <ArrowRight className="w-4 h-4" />

@@ -129,7 +129,7 @@ export default function PricingSection() {
 								className="mt-auto"
 							>
 								<Button
-									variant={plan.popular ? 'gradient' : 'outline'}
+									variant={plan.popular ? 'moody-fill' : 'moody'}
 									size="lg"
 									className="w-full"
 								>

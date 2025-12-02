@@ -72,7 +72,7 @@ export default function Header() {
                 Blog
               </Link>
               <Link href="/onboarding">
-                <Button variant="default" size="sm" className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700">
+                <Button variant="moody-fill" size="sm" className="flex items-center gap-2">
                   <span className="text-lg">✨</span>
                   Create Your Portrait
                 </Button>
@@ -104,7 +104,7 @@ export default function Header() {
           <nav className="container mx-auto px-4 py-4 space-y-4">
             <Link 
               href="/onboarding" 
-              className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 transition-colors font-semibold"
+              className="flex items-center gap-3 p-3 rounded-lg moody-fill transition-colors font-semibold"
               onClick={() => setIsMenuOpen(false)}
             >
               <span className="text-xl">✨</span>

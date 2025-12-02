@@ -3,6 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Moody Button Variables */
+  --moody-glow: #ffe537;
+  --moody-body: #1e1e1e;
+  --moody-transition: 0.3s ease-in-out;
 }
 
 @theme inline {
@@ -23,4 +28,44 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Moody Button Styles */
+.moody {
+  position: relative;
+  background-color: transparent;
+  border: 2px solid var(--moody-glow);
+  color: var(--moody-glow);
+  box-shadow: 0 0 16px var(--moody-glow);
+  transition: all var(--moody-transition);
+}
+
+.moody:hover {
+  box-shadow: 0 0 24px var(--moody-glow);
+  background-color: rgba(255, 229, 55, 0.1);
+  transform: translateY(-2px);
+}
+
+.moody:active {
+  transform: translateY(0);
+}
+
+.moody-fill {
+  position: relative;
+  background-color: var(--moody-glow);
+  border: 2px solid var(--moody-glow);
+  color: var(--moody-body);
+  box-shadow: 0 0 16px var(--moody-glow);
+  transition: all var(--moody-transition);
+  font-weight: 700;
+}
+
+.moody-fill:hover {
+  box-shadow: 0 0 28px var(--moody-glow);
+  background-color: #fff06a;
+  transform: translateY(-2px);
+}
+
+.moody-fill:active {
+  transform: translateY(0);
 }

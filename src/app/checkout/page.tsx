@@ -414,7 +414,8 @@ function CheckoutContent() {
               <Button
                 onClick={handleCheckout}
                 disabled={!isRazorpayReady || isPaying}
-                className="mt-4 w-full bg-gradient-to-r from-blue-600 to-purple-600 py-5 text-base font-semibold shadow-lg hover:from-blue-700 hover:to-purple-700"
+                variant="moody-fill"
+                className="mt-4 w-full py-5 text-base font-semibold"
               >
                 {isPaying ? 'Processing…' : `Pay ${formatCurrency(selectedPlanData.price)}`}
               </Button>

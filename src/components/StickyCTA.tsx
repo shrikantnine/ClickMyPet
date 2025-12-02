@@ -67,7 +67,7 @@ export default function StickyCTA({ alwaysVisible = false }: StickyCtaProps = {}
 
           {/* CTA Button */}
           <Link href="/onboarding">
-            <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm px-6">
+            <Button variant="moody-fill" className="font-bold text-sm px-6">
               ✨ Create Your Portrait
             </Button>
           </Link>

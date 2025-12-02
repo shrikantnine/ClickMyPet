@@ -193,8 +193,9 @@ export default function HeroSection() {
           <div className="mt-8 flex justify-center">
             <Link href="/onboarding">
               <Button
+                variant="moody-fill"
                 size="lg"
-                className="w-full md:w-auto bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-lg px-8 py-6 font-bold shadow-xl"
+                className="w-full md:w-auto text-lg px-8 py-6 font-bold"
               >
                 ✨ Create Your Portrait
               </Button>
