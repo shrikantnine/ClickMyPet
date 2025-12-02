@@ -283,7 +283,7 @@ function CheckoutContent() {
         key={plan.id}
         type="button"
         onClick={() => setSelectedPlan(plan.id as PlanId)}
-        className={`relative w-full rounded-2xl border-2 p-6 text-left transition-all ${
+        className={`relative w-full rounded-xl border-2 p-4 text-left transition-all ${
           isSelected
             ? 'border-blue-600 bg-blue-50 shadow-2xl scale-[1.01]'
             : plan.popular
@@ -301,34 +301,15 @@ function CheckoutContent() {
             <Check className="h-5 w-5" />
           </div>
         )}
-        <div className="mb-4 text-center">
-          <p className="text-sm font-semibold uppercase tracking-wide text-blue-600">
-            {plan.description}
-          </p>
-          <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
-          <p className="mt-2 text-4xl font-black text-gray-900">
-            {formatCurrency(plan.price)}
-          </p>
-          <p className="text-sm text-gray-500">one-time • no subscription</p>
+        <div className="mb-2 text-center">
+          <h3 className="text-lg font-bold text-gray-900">{plan.name}</h3>
+          <p className="text-2xl font-black text-gray-900">{formatCurrency(plan.price)}</p>
+          <p className="text-[11px] text-gray-500">{plan.imageCount} images • {plan.resolution}</p>
         </div>
-        <div className="grid grid-cols-3 gap-3 text-center text-xs font-semibold text-gray-700">
-          <div className="rounded-lg bg-gray-50 p-3">
-            <p className="text-[11px] uppercase text-gray-500">Images</p>
-            <p className="text-base text-gray-900">{plan.imageCount}</p>
-          </div>
-          <div className="rounded-lg bg-gray-50 p-3">
-            <p className="text-[11px] uppercase text-gray-500">Resolution</p>
-            <p className="text-base text-gray-900">{plan.resolution}</p>
-          </div>
-          <div className="rounded-lg bg-gray-50 p-3">
-            <p className="text-[11px] uppercase text-gray-500">Delivery</p>
-            <p className="text-base text-gray-900">{DELIVERY_SPEED[plan.id as PlanId]}</p>
-          </div>
-        </div>
-        <ul className="mt-5 space-y-2 text-sm text-gray-600">
-          {plan.features.map((feature) => (
-            <li key={`${plan.id}-${feature}`} className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 text-green-500" />
+        <ul className="mt-3 space-y-1 text-xs text-gray-600">
+          {plan.features.slice(0, 4).map((feature) => (
+            <li key={`${plan.id}-${feature}`} className="flex items-start gap-1">
+              <Check className="mt-0.5 h-3 w-3 text-green-500 shrink-0" />
               <span>{feature}</span>
             </li>
           ))}
@@ -339,30 +320,24 @@ function CheckoutContent() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 px-4 py-10 text-white">
+      <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 px-4 py-5 text-white">
         <div className="mx-auto max-w-4xl text-center">
-          <p className="text-sm uppercase tracking-[0.3em] text-white/70">Step 3 · Checkout</p>
-          <h1 className="mt-3 text-3xl font-bold md:text-4xl">Choose your plan & unlock your pet’s portrait studio</h1>
-          <p className="mt-4 text-base text-white/80">
-            Switch plans anytime before paying. Only pay once. Full refund if you are not obsessed with the results.
+          <p className="text-xs uppercase tracking-[0.2em] text-white/70">Step 3 · Checkout</p>
+          <h1 className="mt-2 text-2xl font-bold md:text-3xl">Pick a plan & pay</h1>
+          <p className="mt-2 text-sm text-white/80">
+            One-time payment. 48h money-back guarantee.
           </p>
-          <div className="mt-8">
-            <ProgressBar currentStep={3} totalSteps={3} labels={['Styles', 'Backgrounds', 'Checkout']} />
-          </div>
         </div>
       </div>
 
-      <main className="mx-auto max-w-6xl px-4 py-10">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-          <Button asChild variant="outline" className="flex items-center gap-2">
+      <main className="mx-auto max-w-6xl px-4 py-6">
+        <div className="mb-4 flex items-center gap-4">
+          <Button asChild variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600">
             <Link href="/onboarding">
               <ArrowLeft className="h-4 w-4" />
-              Back to selections
+              Back
             </Link>
           </Button>
-          <p className="text-sm text-gray-600">
-            Need help? <a className="font-semibold text-blue-600 hover:underline" href="mailto:support@clickmypet.com">support@clickmypet.com</a>
-          </p>
         </div>
 
         {error && (
@@ -386,112 +361,66 @@ function CheckoutContent() {
           </div>
         )}
 
-        <div className="grid gap-8 lg:grid-cols-[2fr,1fr]">
-          <div className="space-y-8">
+        <div className="grid gap-6 lg:grid-cols-[1fr,320px]">
+          <div className="order-2 lg:order-1 space-y-6">
             <section>
-              <h2 className="mb-4 text-lg font-semibold text-gray-900">Pick a plan</h2>
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <h2 className="mb-3 text-base font-semibold text-gray-900">Select plan</h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 {DISPLAY_PLANS.map((plan) => renderPlanCard(plan))}
               </div>
             </section>
 
-            <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">Your creative brief</h3>
-                  <p className="text-sm text-gray-500">We send this context to the AI studio after payment.</p>
-                </div>
-                <Link href="/onboarding" className="text-sm font-semibold text-blue-600">
-                  Edit selections
-                </Link>
-              </div>
-              <div className="mt-5 space-y-5">
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-gray-400">Styles</p>
-                  {renderPreferenceRow('Styles', preferences?.styles)}
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-gray-400">Backgrounds</p>
-                  {renderPreferenceRow('Backgrounds', preferences?.backgrounds)}
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-gray-400">Accessories</p>
-                  {renderPreferenceRow('Accessories', preferences?.accessories)}
-                </div>
-              </div>
-              {limitWarnings.length > 0 && (
-                <div className="mt-6 rounded-2xl bg-yellow-50 p-4 text-sm text-yellow-800">
-                  <p className="font-semibold">Heads up</p>
-                  <ul className="mt-2 list-disc space-y-1 pl-5">
-                    {limitWarnings.map((warning, index) => (
-                      <li key={`warning-${index}`}>{warning}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </section>
-
-            <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-              <h3 className="text-xl font-semibold text-gray-900">Why creators love PetPX</h3>
-              <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                {guaranteePoints.map((point) => (
-                  <div key={point.title} className="rounded-xl bg-gray-50 p-4">
-                    <point.icon className="h-6 w-6 text-blue-600" />
-                    <p className="mt-3 text-sm font-semibold text-gray-900">{point.title}</p>
-                    <p className="text-sm text-gray-600">{point.detail}</p>
+            {/* Hidden on initial load for brevity; user can expand if needed */}
+            {preferences && (
+              <details className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                <summary className="cursor-pointer text-sm font-semibold text-gray-700">Your creative brief <span className="text-gray-400">(click to expand)</span></summary>
+                <div className="mt-3 space-y-3 text-sm">
+                  <div>
+                    <p className="text-xs uppercase text-gray-400">Styles</p>
+                    {renderPreferenceRow('Styles', preferences?.styles)}
                   </div>
-                ))}
-              </div>
-            </section>
+                  <div>
+                    <p className="text-xs uppercase text-gray-400">Backgrounds</p>
+                    {renderPreferenceRow('Backgrounds', preferences?.backgrounds)}
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase text-gray-400">Accessories</p>
+                    {renderPreferenceRow('Accessories', preferences?.accessories)}
+                  </div>
+                </div>
+                {limitWarnings.length > 0 && (
+                  <div className="mt-4 rounded-lg bg-yellow-50 p-3 text-xs text-yellow-800">
+                    <p className="font-semibold">Heads up</p>
+                    <ul className="mt-1 list-disc pl-4">
+                      {limitWarnings.map((warning, idx) => (
+                        <li key={`w-${idx}`}>{warning}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </details>
+            )}
           </div>
 
-          <aside className="space-y-6">
-            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-xl">
-              <div className="mb-5">
-                <p className="text-sm font-semibold text-blue-600">Order summary</p>
-                <h3 className="text-2xl font-bold text-gray-900">{selectedPlanData.name} Plan</h3>
-                <p className="text-sm text-gray-500">Includes {selectedPlanData.imageCount} AI renders, {selectedPlanData.resolution} delivery.</p>
-              </div>
-              <div className="space-y-3 text-sm text-gray-600">
-                <div className="flex items-center justify-between">
-                  <span>Plan price</span>
-                  <span className="font-semibold text-gray-900">{formatCurrency(selectedPlanData.price)}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Delivery</span>
-                  <span className="text-green-600">Included</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Guarantee</span>
-                  <span>48h refunds</span>
-                </div>
-              </div>
-              <div className="my-6 border-t border-gray-200" />
-              <div className="flex items-center justify-between text-lg font-bold text-gray-900">
-                <span>Total due</span>
+          <aside className="order-1 lg:order-2 space-y-4">
+            <div className="sticky top-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xl">
+              <p className="text-xs font-semibold uppercase text-blue-600">Order summary</p>
+              <h3 className="text-xl font-bold text-gray-900">{selectedPlanData.name} Plan</h3>
+              <p className="mb-4 text-xs text-gray-500">{selectedPlanData.imageCount} images • {selectedPlanData.resolution} • {DELIVERY_SPEED[selectedPlan]}</p>
+              <div className="flex items-center justify-between text-base font-bold text-gray-900">
+                <span>Total</span>
                 <span>{formatCurrency(selectedPlanData.price)}</span>
               </div>
               <Button
                 onClick={handleCheckout}
                 disabled={!isRazorpayReady || isPaying}
-                className="mt-6 w-full bg-gradient-to-r from-blue-600 to-purple-600 py-6 text-base font-semibold shadow-lg hover:from-blue-700 hover:to-purple-700"
+                className="mt-4 w-full bg-gradient-to-r from-blue-600 to-purple-600 py-5 text-base font-semibold shadow-lg hover:from-blue-700 hover:to-purple-700"
               >
-                {isPaying ? 'Preparing secure checkout…' : `Pay ${formatCurrency(selectedPlanData.price)} securely`}
+                {isPaying ? 'Processing…' : `Pay ${formatCurrency(selectedPlanData.price)}`}
               </Button>
-              <p className="mt-3 text-center text-xs text-gray-500">
-                Powered by Razorpay • SSL encrypted • No recurring charges
+              <p className="mt-2 text-center text-[11px] text-gray-400">
+                Secure checkout by Razorpay • 48h refund guarantee
               </p>
-            </div>
-
-            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
-              <h4 className="text-lg font-semibold text-gray-900">Need a receipt or have a question?</h4>
-              <p className="mt-2 text-sm text-gray-600">
-                Email <a className="font-semibold text-blue-600" href="mailto:hello@petpx.com">hello@petpx.com</a> or click the chat bubble on the bottom-right. We reply within a few minutes.
-              </p>
-              <div className="mt-4 flex items-center gap-3 rounded-2xl bg-gray-50 p-4">
-                <Lock className="h-6 w-6 text-gray-500" />
-                <p className="text-sm text-gray-600">Your card details never touch our servers. Razorpay handles everything.</p>
-              </div>
             </div>
           </aside>
         </div>
