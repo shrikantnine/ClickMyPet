@@ -134,7 +134,7 @@ export default function VisitorsAnalytics() {
       <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
         <div className="bg-gray-800 rounded-lg p-8 max-w-md w-full">
           <div className="flex items-center gap-3 mb-6">
-            <Users className="w-8 h-8 text-purple-500" />
+            <Users className="w-8 h-8 text-black/90" />
             <h1 className="text-2xl font-bold text-white">Visitor Analytics</h1>
           </div>
           
@@ -295,7 +295,7 @@ export default function VisitorsAnalytics() {
                     </td>
                     <td className="px-4 py-3 text-sm">
                       {visitor.utm_source || visitor.utm_campaign ? (
-                        <span className="text-purple-400">
+                        <span className="text-black/90">
                           {visitor.utm_source || 'Direct'} {visitor.utm_campaign && `(${visitor.utm_campaign})`}
                         </span>
                       ) : (
@@ -357,7 +357,7 @@ export default function VisitorsAnalytics() {
                 {stats.topSources.map((source, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <span className="text-gray-300">{source.source || 'Direct'}</span>
-                    <span className="text-purple-400 font-semibold">{source.count}</span>
+                    <span className="text-black/90 font-semibold">{source.count}</span>
                   </div>
                 ))}
               </div>
@@ -383,7 +383,7 @@ export default function VisitorsAnalytics() {
 
 function StatCard({ title, value, icon, color }: { title: string; value: string; icon: React.ReactNode; color: string }) {
   const colors = {
-    purple: 'text-purple-400',
+    purple: 'text-black/90',
     blue: 'text-blue-400',
     green: 'text-green-400',
     pink: 'text-pink-400',

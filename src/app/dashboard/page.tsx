@@ -458,7 +458,7 @@ export default function UserDashboard() {
           <div className="bg-white rounded-xl p-6 card-shadow">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <Zap className="w-6 h-6 text-purple-600" />
+                <Zap className="w-6 h-6 text-black/90" />
               </div>
             </div>
             <h3 className="text-gray-600 text-sm mb-1">Usage</h3>

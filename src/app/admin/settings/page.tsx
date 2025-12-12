@@ -241,7 +241,7 @@ export default function AdminSettingsPage() {
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <Users className="w-6 h-6 text-purple-400" />
+                <Users className="w-6 h-6 text-black/90" />
                 <h2 className="text-2xl font-bold">Visitor Tracking System</h2>
               </div>
               <p className="text-gray-400 mb-4">
@@ -306,7 +306,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <div className="bg-gray-700 rounded-lg p-4">
                   <div className="text-sm text-gray-400 mb-1">Avg Time on Site</div>
-                  <div className="text-2xl font-bold text-purple-400">
+                  <div className="text-2xl font-bold text-black/90">
                     {Math.floor(stats.avgTimeOnSite / 60)}m {stats.avgTimeOnSite % 60}s
                   </div>
                 </div>

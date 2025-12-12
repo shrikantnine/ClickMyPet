@@ -274,7 +274,7 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
               {analyticsData.popularStyles.slice(0, 6).map((item, i) => (
                 <div key={i} className="p-4 bg-gray-700 rounded-lg">
-                  <div className="text-xl font-bold text-purple-400">{item.count || 0}</div>
+                  <div className="text-xl font-bold text-black/90">{item.count || 0}</div>
                   <div className="text-sm text-gray-300 capitalize">{item.style?.replace(/-/g, ' ') || 'N/A'}</div>
                 </div>
               ))}
@@ -343,7 +343,7 @@ function MetricCard({
   const colorClasses = {
     blue: 'bg-blue-500/10 text-blue-400',
     green: 'bg-green-500/10 text-green-400',
-    purple: 'bg-purple-500/10 text-purple-400',
+    purple: 'bg-purple-500/10 text-black/90',
     yellow: 'bg-yellow-500/10 text-yellow-400',
   }
 

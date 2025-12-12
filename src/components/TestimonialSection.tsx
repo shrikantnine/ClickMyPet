@@ -186,19 +186,19 @@ export default function TestimonialSection() {
         {/* Trust Indicators */}
         <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div>
-            <p className="text-3xl font-bold text-purple-600">50K+</p>
+            <p className="text-3xl font-bold text-black/90">50K+</p>
             <p className="text-gray-600">Photos Generated</p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-purple-600">2,847</p>
+            <p className="text-3xl font-bold text-black/90">2,847</p>
             <p className="text-gray-600">Happy Customers</p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-purple-600">4.9/5</p>
+            <p className="text-3xl font-bold text-black/90">4.8/5</p>
             <p className="text-gray-600">Average Rating</p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-purple-600">100%</p>
+            <p className="text-3xl font-bold text-black/90">100%</p>
             <p className="text-gray-600">Satisfaction Guarantee</p>
           </div>
         </div>

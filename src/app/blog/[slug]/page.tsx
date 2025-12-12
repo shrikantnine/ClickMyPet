@@ -139,12 +139,12 @@ export default function BlogPost() {
 
             <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-center text-white mt-12">
               <h3 className="text-2xl font-bold mb-4">Ready to Create Amazing Pet Photos?</h3>
-              <p className="text-purple-100 mb-6">
+              <p className="text-black/90 mb-6">
                 Now that you know the secrets, it's time to put them into practice. 
                 Upload your best pet photos and see the magic happen!
               </p>
               <Link href="/checkout">
-                <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 font-semibold">
+                <Button size="lg" className="bg-white text-black/90 hover:bg-gray-100 font-semibold">
                   Start Creating AI Pet Photos
                 </Button>
               </Link>

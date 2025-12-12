@@ -16,40 +16,53 @@ const PLAN_LIMITS: Record<string, { styles: number; backgrounds: number; accesso
   ultra: { styles: 99, backgrounds: 99, accessories: 99 },
 }
 
-// Style options
+// Style options - organized in /public/onboarding/styles/
 const styles = [
-  { id: 'realistic', name: 'Realistic Portrait', image: '/Dog/Golden Retriever Santa Xmas.png' },
-  { id: 'superhero', name: 'Superhero', image: '/Cat/Persian Cat Superhero Superman.png' },
-  { id: 'royal', name: 'Royal Portrait', image: '/Dog/Poodle Ex Royalty Portrait.png' },
-  { id: 'cool', name: 'Cool & Casual', image: '/Dog/Beagle Cool Portrait Glasses Hat.png' },
-  { id: 'gangster', name: 'Gangster', image: '/Dog/Bulldog Gangster Chilling In Car.png' },
-  { id: 'professional', name: 'Professional', image: '/Dog/German Shepherd Suite Portrait.png' },
-  { id: 'christmas', name: 'Christmas', image: '/Cat/Bombay Cat Sant Christmas Xmas.png' },
-  { id: 'action', name: 'Action Shot', image: '/Dog/Labrador Retriever Jump.png' },
+  { id: 'realistic', name: 'Realistic Portrait', image: '/onboarding/styles/realistic.png', isCustom: false },
+  { id: 'superhero', name: 'Superhero', image: '/onboarding/styles/superhero.png', isCustom: false },
+  { id: 'royal', name: 'Royal Portrait', image: '/onboarding/styles/royal.png', isCustom: false },
+  { id: 'cool', name: 'Cool & Casual', image: '/onboarding/styles/cool.png', isCustom: false },
+  { id: 'gangster', name: 'Gangster', image: '/onboarding/styles/gangster.png', isCustom: false },
+  { id: 'professional', name: 'Professional', image: '/onboarding/styles/professional.png', isCustom: false },
+  { id: 'christmas', name: 'Christmas', image: '/onboarding/styles/christmas.png', isCustom: false },
+  { id: 'action', name: 'Action Shot', image: '/onboarding/styles/action.png', isCustom: false },
+  { id: 'animated', name: 'Animated', image: '/onboarding/styles/animated.png', isCustom: false },
+  { id: 'abstract-art', name: 'Abstract Art', image: '/onboarding/styles/abstract-art.png', isCustom: false },
+  { id: 'monochrome', name: 'Monochrome', image: '/onboarding/styles/monochrome.png', isCustom: false },
+  { id: 'newspaper', name: 'Newspaper', image: '/onboarding/styles/newspaper.png', isCustom: false },
+  { id: 'at-work', name: 'At Work', image: '/onboarding/styles/at-work.png', isCustom: false },
+  { id: 'sports', name: 'Sports', image: '/onboarding/styles/sports.png', isCustom: false },
+  { id: 'close-up', name: 'Close-Up', image: '/onboarding/styles/close-up.png', isCustom: false },
+  { id: 'nature', name: 'Nature', image: '/onboarding/styles/nature.png', isCustom: false },
+  { id: 'dressed', name: 'Dressed To Impress', image: '/onboarding/styles/dressed.png', isCustom: false },
+  { id: 'custom-style', name: 'Custom', image: '/onboarding/styles/custom.png', isCustom: true, maxOnly: true },
 ]
 
 // Background options
 const backgrounds = [
-  { id: 'studio', name: 'Studio Background', preview: '#f5f5f5' },
-  { id: 'outdoor', name: 'Outdoor Scene', preview: '#87CEEB' },
-  { id: 'luxury', name: 'Luxury Interior', preview: '#D4AF37' },
-  { id: 'nature', name: 'Nature', preview: '#228B22' },
-  { id: 'urban', name: 'Urban Street', preview: '#696969' },
-  { id: 'beach', name: 'Beach', preview: '#F0E68C' },
-  { id: 'abstract', name: 'Abstract', preview: '#FF6B6B' },
-  { id: 'custom', name: 'Custom', preview: '#9370DB' },
+  { id: 'studio-dark', name: 'Studio Dark', preview: '#1a1a1a', isCustom: false },
+  { id: 'studio-light', name: 'Studio Light', preview: '#f5f5f5', isCustom: false },
+  { id: 'nature', name: 'Nature', preview: '#228B22', isCustom: false },
+  { id: 'city', name: 'City', preview: '#4a5568', isCustom: false },
+  { id: 'beach', name: 'Beach', preview: '#F0E68C', isCustom: false },
+  { id: 'street', name: 'Street', preview: '#696969', isCustom: false },
+  { id: 'luxury', name: 'Luxury Interior', preview: '#D4AF37', isCustom: false },
+  { id: 'abstract', name: 'Abstract', preview: '#FF6B6B', isCustom: false },
+  { id: 'custom-background', name: 'Custom', preview: '#9370DB', isCustom: true, maxOnly: true },
 ]
 
 // Accessory options
 const accessories = [
-  { id: 'glasses', name: 'Glasses', emoji: '🕶️' },
-  { id: 'hat', name: 'Hat', emoji: '🎩' },
-  { id: 'chain', name: 'Gold Chain', emoji: '⛓️' },
-  { id: 'bow', name: 'Bow Tie', emoji: '🎀' },
-  { id: 'crown', name: 'Crown', emoji: '👑' },
-  { id: 'cape', name: 'Cape', emoji: '🦸' },
-  { id: 'scarf', name: 'Scarf', emoji: '🧣' },
-  { id: 'bandana', name: 'Bandana', emoji: '👒' },
+  { id: 'glasses', name: 'Glasses', emoji: '🕶️', isCustom: false },
+  { id: 'hat', name: 'Hat', emoji: '🎩', isCustom: false },
+  { id: 'chain', name: 'Gold Chain', emoji: '⛓️', isCustom: false },
+  { id: 'bow', name: 'Bow Tie', emoji: '🎀', isCustom: false },
+  { id: 'crown', name: 'Crown', emoji: '👑', isCustom: false },
+  { id: 'jacket', name: 'Jacket', emoji: '🧥', isCustom: false },
+  { id: 'hoodie', name: 'Hoodie', emoji: '👕', isCustom: false },
+  { id: 'goggles', name: 'Goggles', emoji: '🥽', isCustom: false },
+  { id: 'shirt', name: 'Shirt', emoji: '👔', isCustom: false },
+  { id: 'custom-accessory', name: 'Custom', emoji: '✨', isCustom: true, maxOnly: true },
 ]
 
 export default function OnboardingPage() {
@@ -82,6 +95,12 @@ function OnboardingContent() {
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([])
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [upgradeReason, setUpgradeReason] = useState('')
+  
+  // Custom input states for Max (Ultra) users
+  const [customStyleText, setCustomStyleText] = useState('')
+  const [customBackgroundText, setCustomBackgroundText] = useState('')
+  const [customAccessoryText, setCustomAccessoryText] = useState('')
+  const isMaxUser = planId === 'ultra'
 
   const toggleSelection = (
     id: string,
@@ -145,6 +164,11 @@ function OnboardingContent() {
         styles: selectedStyles,
         backgrounds: selectedBackgrounds,
         accessories: selectedAccessories,
+        customInputs: {
+          style: customStyleText,
+          background: customBackgroundText,
+          accessory: customAccessoryText,
+        }
       }
       sessionStorage.setItem('userPreferences', JSON.stringify(preferences))
       router.push(`/checkout?plan=${planId}`)
@@ -221,7 +245,7 @@ function OnboardingContent() {
                   onClick={handleGoogleSignUp}
                   variant="outline"
                   size="lg"
-                  className="w-full bg-white hover:bg-gray-50 border-gray-300 card-shadow-hover"
+                  className="w-full bg-white hover:bg-gray-50 border-gray-300 card-shadow-hover text-black/90 font-medium"
                 >
                   <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -258,9 +282,6 @@ function OnboardingContent() {
               {/* Email Form */}
               <form onSubmit={handleEmailSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-1">
-                    Email address
-                  </label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
@@ -269,16 +290,13 @@ function OnboardingContent() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white placeholder:text-black/70 text-black/90"
                       placeholder="Enter your email"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-800 mb-1">
-                    Password
-                  </label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
@@ -287,7 +305,7 @@ function OnboardingContent() {
                       required
                       value={formData.password}
                       onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white placeholder:text-black/70 text-black/90"
                       placeholder="Create a password"
                     />
                     <button
@@ -302,9 +320,6 @@ function OnboardingContent() {
 
                 {authMode === 'signup' && (
                   <div>
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-800 mb-1">
-                      Confirm Password
-                    </label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                       <input
@@ -313,7 +328,7 @@ function OnboardingContent() {
                         required
                         value={formData.confirmPassword}
                         onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white placeholder:text-black/70 text-black/90"
                         placeholder="Confirm your password"
                       />
                     </div>
@@ -362,40 +377,75 @@ function OnboardingContent() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {styles.map((style) => (
-                <div
-                  key={style.id}
-                  onClick={() =>
-                    toggleSelection(style.id, selectedStyles, setSelectedStyles, limits.styles, 'styles')
-                  }
-                  className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 group card-shadow-hover ${
-                    selectedStyles.includes(style.id)
-                      ? 'border-blue-600 scale-105'
-                      : 'border-transparent hover:border-blue-300'
-                  }`}
-                >
-                  <Image
-                    src={style.image}
-                    alt={style.name}
-                    width={300}
-                    height={375}
-                    loading="lazy"
-                    className="w-full h-64 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-                    <p className="text-white font-semibold text-center text-sm md:text-base">
-                      {style.name}
-                    </p>
-                  </div>
-                  {selectedStyles.includes(style.id) && (
-                    <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
-                      <Check className="w-5 h-5 text-white" />
+              {styles.map((style) => {
+                const isMaxOnlyItem = 'maxOnly' in style && style.maxOnly
+                const isLocked = isMaxOnlyItem && !isMaxUser
+                const isSelected = selectedStyles.includes(style.id)
+                
+                return (
+                  <div
+                    key={style.id}
+                    onClick={() => {
+                      if (isLocked) {
+                        setUpgradeReason('Custom Style (Max Exclusive)')
+                        setShowUpgradeModal(true)
+                        return
+                      }
+                      toggleSelection(style.id, selectedStyles, setSelectedStyles, limits.styles, 'styles')
+                    }}
+                    className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 group card-shadow-hover ${
+                      isSelected
+                        ? 'border-blue-600 scale-105'
+                        : 'border-transparent hover:border-blue-300'
+                    } ${isLocked ? 'opacity-75' : ''}`}
+                  >
+                    <Image
+                      src={style.image}
+                      alt={style.name}
+                      width={300}
+                      height={375}
+                      loading="lazy"
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                      <p className="text-white font-semibold text-center text-sm md:text-base">
+                        {style.name}
+                        {isMaxOnlyItem && <span className="block text-xs text-yellow-400">✨ Max Exclusive</span>}
+                      </p>
                     </div>
-                  )}
-                </div>
-              ))}
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
+                        <Check className="w-5 h-5 text-white" />
+                      </div>
+                    )}
+                    {isLocked && (
+                      <div className="absolute top-2 left-2 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                        <Lock className="w-4 h-4 text-white" />
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
+
+            {/* Custom Style Input for Max users */}
+            {selectedStyles.includes('custom-style') && isMaxUser && (
+              <div className="max-w-md mx-auto mt-6 p-4 bg-white/80 backdrop-blur rounded-xl border border-blue-200 card-shadow">
+                <label className="block text-sm font-medium text-gray-800 mb-2">
+                  ✨ Describe your custom style (Max Exclusive)
+                </label>
+                <input
+                  type="text"
+                  value={customStyleText}
+                  onChange={(e) => setCustomStyleText(e.target.value.slice(0, 64))}
+                  placeholder="e.g., Vintage 1920s detective with monocle"
+                  maxLength={64}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white placeholder:text-black/70 text-black/90"
+                />
+                <p className="text-xs text-gray-500 mt-1 text-right">{customStyleText.length}/64 characters</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -412,38 +462,73 @@ function OnboardingContent() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {backgrounds.map((bg) => (
-                <div
-                  key={bg.id}
-                  onClick={() =>
-                    toggleSelection(
-                      bg.id,
-                      selectedBackgrounds,
-                      setSelectedBackgrounds,
-                      limits.backgrounds,
-                      'backgrounds'
-                    )
-                  }
-                  className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-6 group card-shadow-hover ${
-                    selectedBackgrounds.includes(bg.id)
-                      ? 'border-blue-600 scale-105'
-                      : 'border-gray-300 hover:border-blue-300'
-                  }`}
-                  style={{ backgroundColor: bg.preview }}
-                >
-                  <div className="h-32 flex items-center justify-center">
-                    <p className="text-white font-bold text-xl text-center drop-shadow-lg group-hover:scale-110 transition-transform">
-                      {bg.name}
-                    </p>
-                  </div>
-                  {selectedBackgrounds.includes(bg.id) && (
-                    <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
-                      <Check className="w-5 h-5 text-white" />
+              {backgrounds.map((bg) => {
+                const isMaxOnlyItem = 'maxOnly' in bg && bg.maxOnly
+                const isLocked = isMaxOnlyItem && !isMaxUser
+                const isSelected = selectedBackgrounds.includes(bg.id)
+                
+                return (
+                  <div
+                    key={bg.id}
+                    onClick={() => {
+                      if (isLocked) {
+                        setUpgradeReason('Custom Background (Max Exclusive)')
+                        setShowUpgradeModal(true)
+                        return
+                      }
+                      toggleSelection(
+                        bg.id,
+                        selectedBackgrounds,
+                        setSelectedBackgrounds,
+                        limits.backgrounds,
+                        'backgrounds'
+                      )
+                    }}
+                    className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-6 group card-shadow-hover ${
+                      isSelected
+                        ? 'border-blue-600 scale-105'
+                        : 'border-gray-300 hover:border-blue-300'
+                    } ${isLocked ? 'opacity-75' : ''}`}
+                    style={{ backgroundColor: bg.preview }}
+                  >
+                    <div className="h-32 flex items-center justify-center flex-col">
+                      <p className="text-white font-bold text-xl text-center drop-shadow-lg group-hover:scale-110 transition-transform">
+                        {bg.name}
+                      </p>
+                      {isMaxOnlyItem && <span className="text-xs text-yellow-300 mt-1 drop-shadow">✨ Max Exclusive</span>}
                     </div>
-                  )}
-                </div>
-              ))}
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
+                        <Check className="w-5 h-5 text-white" />
+                      </div>
+                    )}
+                    {isLocked && (
+                      <div className="absolute top-2 left-2 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                        <Lock className="w-4 h-4 text-white" />
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
+
+            {/* Custom Background Input for Max users */}
+            {selectedBackgrounds.includes('custom-background') && isMaxUser && (
+              <div className="max-w-md mx-auto mt-6 p-4 bg-white/80 backdrop-blur rounded-xl border border-blue-200 card-shadow">
+                <label className="block text-sm font-medium text-gray-800 mb-2">
+                  ✨ Describe your custom background (Max Exclusive)
+                </label>
+                <input
+                  type="text"
+                  value={customBackgroundText}
+                  onChange={(e) => setCustomBackgroundText(e.target.value.slice(0, 64))}
+                  placeholder="e.g., Magical forest with glowing fireflies"
+                  maxLength={64}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white placeholder:text-black/70 text-black/90"
+                />
+                <p className="text-xs text-gray-500 mt-1 text-right">{customBackgroundText.length}/64 characters</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -461,11 +546,25 @@ function OnboardingContent() {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
               {accessories.map((accessory) => {
-                const isLocked = limits.accessories === 0
+                const isPlanLocked = limits.accessories === 0
+                const isMaxOnlyItem = 'maxOnly' in accessory && accessory.maxOnly
+                const isLocked = isPlanLocked || (isMaxOnlyItem && !isMaxUser)
+                const isSelected = selectedAccessories.includes(accessory.id)
+                
                 return (
                   <div
                     key={accessory.id}
-                    onClick={() =>
+                    onClick={() => {
+                      if (isMaxOnlyItem && !isMaxUser) {
+                        setUpgradeReason('Custom Accessory (Max Exclusive)')
+                        setShowUpgradeModal(true)
+                        return
+                      }
+                      if (isPlanLocked) {
+                        setUpgradeReason('accessories')
+                        setShowUpgradeModal(true)
+                        return
+                      }
                       toggleSelection(
                         accessory.id,
                         selectedAccessories,
@@ -473,9 +572,9 @@ function OnboardingContent() {
                         limits.accessories,
                         'accessories'
                       )
-                    }
+                    }}
                     className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-8 bg-white group card-shadow-hover ${
-                      selectedAccessories.includes(accessory.id)
+                      isSelected
                         ? 'border-blue-600 scale-105'
                         : 'border-gray-300 hover:border-blue-300'
                     } ${isLocked ? 'opacity-75 hover:opacity-100' : ''}`}
@@ -485,9 +584,10 @@ function OnboardingContent() {
                       <p className="font-semibold text-gray-800">
                         {accessory.name}
                       </p>
+                      {isMaxOnlyItem && <span className="text-xs text-yellow-600">✨ Max Exclusive</span>}
                     </div>
                     
-                    {selectedAccessories.includes(accessory.id) && (
+                    {isSelected && (
                       <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
                         <Check className="w-5 h-5 text-white" />
                       </div>
@@ -504,6 +604,24 @@ function OnboardingContent() {
                 )
               })}
             </div>
+
+            {/* Custom Accessory Input for Max users */}
+            {selectedAccessories.includes('custom-accessory') && isMaxUser && (
+              <div className="max-w-md mx-auto mt-6 p-4 bg-white/80 backdrop-blur rounded-xl border border-blue-200 card-shadow">
+                <label className="block text-sm font-medium text-gray-800 mb-2">
+                  ✨ Describe your custom accessory (Max Exclusive)
+                </label>
+                <input
+                  type="text"
+                  value={customAccessoryText}
+                  onChange={(e) => setCustomAccessoryText(e.target.value.slice(0, 64))}
+                  placeholder="e.g., Diamond-studded collar with ruby pendant"
+                  maxLength={64}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white placeholder:text-black/70 text-black/90"
+                />
+                <p className="text-xs text-gray-500 mt-1 text-right">{customAccessoryText.length}/64 characters</p>
+              </div>
+            )}
 
             {limits.accessories === 0 && (
               <div className="text-center mt-4">

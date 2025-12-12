@@ -15,7 +15,7 @@ export default function TrustBadges() {
             <span>7-Day Money Back</span>
           </div>
           <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4 text-purple-600" />
+            <Shield className="w-4 h-4 text-black/90" />
             <span>Privacy Protected</span>
           </div>
           <div className="flex items-center gap-2">

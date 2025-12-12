@@ -9,6 +9,12 @@ export interface UserSelections {
   background: string
   accessories?: string[]
   customNotes?: string
+  // Custom inputs for Max (Ultra) users
+  customInputs?: {
+    style?: string  // Custom style description (max 64 chars)
+    background?: string  // Custom background description (max 64 chars)
+    accessory?: string  // Custom accessory description (max 64 chars)
+  }
 }
 
 export interface StyleDefinition {
@@ -269,6 +275,11 @@ export function buildPrompt(selections: UserSelections): string {
   const style = STYLE_DEFINITIONS[selections.style] || STYLE_DEFINITIONS['professional-portrait']
   const background = BACKGROUND_DEFINITIONS[selections.background] || BACKGROUND_DEFINITIONS['studio-white']
   
+  // Check for custom inputs (Max/Ultra users)
+  const hasCustomStyle = selections.style === 'custom-style' && selections.customInputs?.style
+  const hasCustomBackground = selections.background === 'custom-background' && selections.customInputs?.background
+  const hasCustomAccessory = selections.accessories?.includes('custom-accessory') && selections.customInputs?.accessory
+  
   // Build pet description
   let petDescription = ''
   
@@ -283,21 +294,37 @@ export function buildPrompt(selections: UserSelections): string {
     petDescription = `${petDescription} named ${selections.petName}`
   }
   
-  // Build accessories string
+  // Build accessories string (including custom accessory for Max users)
   let accessoriesText = ''
   if (selections.accessories && selections.accessories.length > 0) {
     const accessoryDescriptions = selections.accessories
+      .filter(acc => acc !== 'custom-accessory') // Handle custom separately
       .map(acc => ACCESSORY_DEFINITIONS[acc])
       .filter(Boolean)
+    
+    // Add custom accessory description if provided (Max exclusive)
+    if (hasCustomAccessory) {
+      accessoryDescriptions.push(selections.customInputs!.accessory!.slice(0, 64))
+    }
     
     if (accessoryDescriptions.length > 0) {
       accessoriesText = accessoryDescriptions.join(', ')
     }
   }
   
+  // Determine style to use (custom or predefined)
+  const styleArtistic = hasCustomStyle 
+    ? selections.customInputs!.style!.slice(0, 64) + ' style'
+    : style.artisticStyle
+  
+  // Determine background/environment to use (custom or predefined)
+  const environmentText = hasCustomBackground
+    ? selections.customInputs!.background!.slice(0, 64)
+    : background.environment
+  
   // Construct the main prompt with proper structure
   const promptParts = [
-    style.artisticStyle,
+    styleArtistic,
     'of a',
     petDescription,
   ]
@@ -308,11 +335,13 @@ export function buildPrompt(selections: UserSelections): string {
   
   promptParts.push(
     'in',
-    background.environment
+    environmentText
   )
   
-  // Add style modifiers
-  promptParts.push(...style.promptModifiers)
+  // Add style modifiers (skip for custom styles)
+  if (!hasCustomStyle) {
+    promptParts.push(...style.promptModifiers)
+  }
   
   // Add quality enhancers
   promptParts.push(

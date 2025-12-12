@@ -316,7 +316,7 @@ export default function ResultPage() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     onClick={handleUpgrade}
-                    className="bg-white text-purple-600 hover:bg-gray-100 font-bold text-lg px-8 py-6"
+                    className="bg-white text-black/90 hover:bg-gray-100 font-bold text-lg px-8 py-6"
                   >
                     Get 40 Portraits for $19 →
                   </Button>

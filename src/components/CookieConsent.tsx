@@ -74,7 +74,7 @@ export function CookieConsent() {
               By clicking "Accept", you consent to our use of cookies.{' '}
               <a 
                 href="/privacy-policy" 
-                className="text-purple-600 hover:text-purple-700 underline"
+                className="text-black/90 hover:text-black/80 underline"
               >
                 Learn more
               </a>
