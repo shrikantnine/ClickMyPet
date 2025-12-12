@@ -283,12 +283,12 @@ function CheckoutContent() {
         key={plan.id}
         type="button"
         onClick={() => setSelectedPlan(plan.id as PlanId)}
-        className={`relative w-full rounded-xl border-2 p-4 text-left transition-all ${
+        className={`relative w-full rounded-xl border-2 p-4 text-left transition-all card-shadow-hover ${
           isSelected
-            ? 'border-blue-600 bg-blue-50 shadow-2xl scale-[1.01]'
+            ? 'border-blue-600 bg-blue-50 scale-[1.01]'
             : plan.popular
-            ? 'border-blue-200 bg-white shadow-lg hover:shadow-xl'
-            : 'border-gray-200 bg-white shadow-md hover:shadow-lg'
+            ? 'border-blue-200 bg-white'
+            : 'border-gray-200 bg-white'
         }`}
       >
         {plan.popular && (
@@ -322,7 +322,7 @@ function CheckoutContent() {
     <div className="min-h-screen bg-slate-50">
       <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 px-4 py-5 text-white">
         <div className="mx-auto max-w-4xl text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-white/70">Step 3 · Checkout</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-white/70">Step 5 · Checkout</p>
           <h1 className="mt-2 text-2xl font-bold md:text-3xl">Pick a plan & pay</h1>
           <p className="mt-2 text-sm text-white/80">
             One-time payment. 48h money-back guarantee.
@@ -403,7 +403,7 @@ function CheckoutContent() {
           </div>
 
           <aside className="order-1 lg:order-2 space-y-4">
-            <div className="sticky top-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xl">
+            <div className="sticky top-4 rounded-2xl border border-gray-100 bg-white p-5 card-shadow">
               <p className="text-xs font-semibold uppercase text-blue-600">Order summary</p>
               <h3 className="text-xl font-bold text-gray-900">{selectedPlanData.name} Plan</h3>
               <p className="mb-4 text-xs text-gray-500">{selectedPlanData.imageCount} images • {selectedPlanData.resolution} • {DELIVERY_SPEED[selectedPlan]}</p>

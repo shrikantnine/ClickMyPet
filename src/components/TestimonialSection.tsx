@@ -96,7 +96,7 @@ export default function TestimonialSection() {
         <div className="block md:hidden">
           <div className="flex flex-col items-center">
             <div
-              className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col relative overflow-hidden"
+              className="w-full max-w-md mx-auto bg-white rounded-2xl card-shadow border border-gray-100 flex flex-col relative overflow-hidden"
               style={{
                 backgroundImage: `url('/Testimonial/Click My Pet Testimonial ${testimonials[current].name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
                 backgroundSize: 'cover',
@@ -145,7 +145,7 @@ export default function TestimonialSection() {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col relative overflow-hidden"
+              className="bg-white rounded-2xl p-6 card-shadow-hover transition-shadow duration-300 border border-gray-100 flex flex-col relative overflow-hidden"
               style={{
                 backgroundImage: `url('/Testimonial/Click My Pet Testimonial ${testimonial.name.replace(/\./g, '').replace(/ /g, '%20')}.png')`,
                 backgroundSize: 'cover',

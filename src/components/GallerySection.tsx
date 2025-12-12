@@ -103,7 +103,7 @@ export default function GallerySection() {
                     height={310}
                     loading="lazy"
                     className="
-                      rounded-sm shadow-sm hover:shadow-xl transition-shadow duration-300
+                      rounded-sm card-shadow-hover transition-shadow duration-300
                       h-[31vh] w-[24.8vh]
                       md:h-[31vh] md:w-[24.8vh]
                       object-cover
@@ -119,7 +119,7 @@ export default function GallerySection() {
       {/* CTA Button */}
       <div className="container mx-auto px-4 py-8 text-center flex-shrink-0">
         <Link href="/checkout">
-          <Button variant="gradient" size="lg" className="px-8">
+          <Button variant="moody-fill" size="lg" className="px-8">
             Create Your Pet Gallery Now
           </Button>
         </Link>

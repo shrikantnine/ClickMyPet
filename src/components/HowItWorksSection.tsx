@@ -85,7 +85,7 @@ export default function HowItWorksSection() {
         {/* CTA Button */}
         <div className="text-center">
           <Link href="/onboarding">
-            <Button variant="gradient" size="lg" className="px-8">
+            <Button variant="moody-fill" size="lg" className="px-8">
               Start Creating Amazing Pet Photos
             </Button>
           </Link>

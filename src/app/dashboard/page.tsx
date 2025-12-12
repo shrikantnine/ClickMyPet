@@ -430,7 +430,7 @@ export default function UserDashboard() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-md">
+          <div className="bg-white rounded-xl p-6 card-shadow">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Crown className="w-6 h-6 text-blue-600" />
@@ -443,7 +443,7 @@ export default function UserDashboard() {
             <p className="text-2xl font-bold text-gray-900">{subscription?.plan} Membership</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-md">
+          <div className="bg-white rounded-xl p-6 card-shadow">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                 <TrendingUp className="w-6 h-6 text-green-600" />
@@ -455,7 +455,7 @@ export default function UserDashboard() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-md">
+          <div className="bg-white rounded-xl p-6 card-shadow">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                 <Zap className="w-6 h-6 text-purple-600" />
@@ -475,7 +475,7 @@ export default function UserDashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-t-2xl shadow-lg">
+        <div className="bg-white rounded-t-2xl card-shadow">
           <div className="border-b border-gray-200">
             <div className="flex">
               <button

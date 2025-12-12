@@ -79,7 +79,7 @@ export default function ClosingSection() {
           {/* Scrollable Image Gallery - uniform image sizing */}
           <div className="relative flex flex-col items-center space-y-6">
             <div 
-              className="relative rounded-2xl overflow-hidden flex items-center justify-center h-auto md:h-[50vh] w-full md:w-[40vh]"
+              className="relative rounded-2xl overflow-hidden flex items-center justify-center h-auto md:h-[50vh] w-full md:w-[40vh] card-shadow"
               style={{ aspectRatio: "4/5" }}
             >
               {/* Image Carousel/Scroller */}
@@ -145,7 +145,7 @@ export default function ClosingSection() {
           <Link href="/checkout">
             <Button 
               size="lg" 
-              variant="gradient"
+              variant="moody-fill"
               className="font-bold px-8 py-4 text-lg"
             >
               Transform Your Pet Photos Now

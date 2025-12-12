@@ -429,7 +429,7 @@ export default function GalleryPage() {
             {filteredPhotos.map((photo, index) => (
               <div
                 key={`${photo.category}-${index}`}
-                className="group relative overflow-hidden rounded-sm bg-gray-100 hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+                className="group relative overflow-hidden rounded-sm bg-gray-100 card-shadow-hover transition-all duration-300 hover:scale-105 cursor-pointer"
               >
                 <Image
                   src={photo.src}

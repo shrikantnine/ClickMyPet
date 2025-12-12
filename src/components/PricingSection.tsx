@@ -81,15 +81,14 @@ export default function PricingSection() {
                         <br />
                         100% satisfaction guarantee - refund if you're not happy!
 					</p>
-				</div>				{/* Pricing Cards */}
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+				</div>				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
 					{pricingPlans.map((plan, index) => (
 						<div
 							key={index}
-							className={`relative rounded-sm border-2 p-8 flex flex-col ${
+							className={`relative rounded-sm border-2 p-8 flex flex-col card-shadow-hover ${
 								plan.popular
-									? 'border-blue-500 bg-blue-50 shadow-xl scale-105'
-									: 'border-gray-200 bg-white shadow-lg'
+									? 'border-blue-500 bg-blue-50 scale-105'
+									: 'border-gray-200 bg-white'
 							}`}
 						>
 							{plan.popular && (

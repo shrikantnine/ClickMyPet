@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Marquee from 'react-fast-marquee'
 import { SPACING } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 // Showcase photos - Target distribution: 9 Dogs, 8 Cats, 2 Fish, 2 Birds, 2 Horses (21 total) - evenly distributed
 const showcasePhotos = [
@@ -54,7 +55,7 @@ export default function ShowcaseSection() {
               >
                 <div
                   className="
-                    relative overflow-hidden rounded-sm shadow-lg
+                    relative overflow-hidden rounded-sm card-shadow
                     flex items-center justify-center
                     h-[31vh] w-[24.8vh]
                     md:h-[31vh] md:w-[24.8vh]
@@ -87,9 +88,9 @@ export default function ShowcaseSection() {
 
         {/* CTA Button */}
         <div className="container mx-auto px-4 mt-12 text-center">
-          <button className="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">
+          <Button variant="moody-fill" size="lg" className="px-8 rounded-full">
             Explore More
-          </button>
+          </Button>
         </div>
       </div>
     </section>

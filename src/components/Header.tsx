@@ -73,8 +73,7 @@ export default function Header() {
               </Link>
               <Link href="/onboarding">
                 <Button variant="moody-fill" size="sm" className="flex items-center gap-2">
-                  <span className="text-lg">✨</span>
-                  Create Your Portrait
+                  Create Your Pet Portraits Now
                 </Button>
               </Link>
             </nav>
@@ -107,8 +106,7 @@ export default function Header() {
               className="flex items-center gap-3 p-3 rounded-lg moody-fill transition-colors font-semibold"
               onClick={() => setIsMenuOpen(false)}
             >
-              <span className="text-xl">✨</span>
-              <span className="font-medium">Create Your Portrait</span>
+              <span className="font-medium">Create Your Pet Portraits Now</span>
             </Link>
             <Link 
               href="#how-it-works" 

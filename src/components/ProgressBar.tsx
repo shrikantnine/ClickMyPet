@@ -7,83 +7,83 @@ interface ProgressBarProps {
 }
 
 export default function ProgressBar({ currentStep, totalSteps, labels = [] }: ProgressBarProps) {
-  const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100
-
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      {/* Frosted Glass Container */}
-      <div className="relative bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-xl">
-        {/* Progress Bar Track */}
-        <div className="relative">
-          {/* Background Track */}
-          <div className="absolute top-4 left-0 right-0 h-1 bg-white/20 rounded-full">
-            {/* Active Progress Fill */}
+    <div className="w-full max-w-3xl mx-auto px-4">
+      {/* Arrow Progress Bar Container */}
+      <div className="relative flex items-center">
+        {Array.from({ length: totalSteps }).map((_, index) => {
+          const stepNumber = index + 1
+          const isCompleted = stepNumber < currentStep
+          const isCurrent = stepNumber === currentStep
+          const isLast = stepNumber === totalSteps
+          const isFirst = stepNumber === 1
+          const label = labels[index] || `Step ${stepNumber}`
+
+          return (
             <div
-              className="h-full bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-full transition-all duration-500 ease-out shadow-lg shadow-blue-400/50"
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
-
-          {/* Step Indicators */}
-          <div className="relative flex justify-between">
-            {Array.from({ length: totalSteps }).map((_, index) => {
-              const stepNumber = index + 1
-              const isCompleted = stepNumber < currentStep
-              const isCurrent = stepNumber === currentStep
-              const label = labels[index]
-
-              return (
-                <div key={stepNumber} className="flex flex-col items-center">
-                  {/* Circle Indicator */}
-                  <div
+              key={stepNumber}
+              className="flex-1 relative"
+            >
+              {/* Arrow Shape */}
+              <div
+                className={`
+                  relative flex items-center justify-center h-12 
+                  ${isFirst ? 'rounded-l-lg' : ''} 
+                  ${isLast ? 'rounded-r-lg' : ''}
+                  ${isCompleted || isCurrent 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-gray-200 text-gray-500'
+                  }
+                  transition-all duration-300
+                `}
+                style={{
+                  clipPath: isLast 
+                    ? 'polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 12px 50%)'
+                    : isFirst
+                    ? 'polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%)'
+                    : 'polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 12px 50%)',
+                  marginLeft: isFirst ? '0' : '-12px',
+                }}
+              >
+                <div className="flex items-center gap-2 px-4">
+                  {/* Step indicator */}
+                  <span
                     className={`
-                      w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm
-                      transition-all duration-300 backdrop-blur-sm
-                      ${
-                        isCompleted
-                          ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white shadow-lg shadow-green-400/50 scale-100'
-                          : isCurrent
-                          ? 'bg-gradient-to-br from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/50 scale-110 ring-4 ring-white/30'
-                          : 'bg-white/30 text-gray-500 border-2 border-white/40'
+                      flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
+                      ${isCompleted
+                        ? 'bg-white text-blue-500'
+                        : isCurrent
+                        ? 'bg-white/20 text-white border-2 border-white'
+                        : 'bg-gray-300 text-gray-600'
                       }
                     `}
                   >
                     {isCompleted ? (
-                      <Check className="w-5 h-5 stroke-[3]" />
+                      <Check className="w-4 h-4 stroke-[3]" />
                     ) : (
                       stepNumber
                     )}
-                  </div>
-
-                  {/* Label (if provided) */}
-                  {label && (
-                    <span
-                      className={`
-                        mt-2 text-xs font-medium transition-all duration-300
-                        ${
-                          isCurrent
-                            ? 'text-white scale-105'
-                            : isCompleted
-                            ? 'text-white/80'
-                            : 'text-white/50'
-                        }
-                      `}
-                    >
-                      {label}
-                    </span>
-                  )}
+                  </span>
+                  
+                  {/* Label */}
+                  <span className={`
+                    font-medium text-sm hidden sm:inline whitespace-nowrap
+                    ${isCompleted || isCurrent ? 'text-white' : 'text-gray-500'}
+                  `}>
+                    {label}
+                  </span>
                 </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Current Step Text (Minimal) */}
-        <div className="text-center mt-4">
-          <span className="text-white/60 text-sm font-medium">
-            {currentStep}/{totalSteps}
-          </span>
-        </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      
+      {/* Mobile: Show current step label */}
+      <div className="sm:hidden text-center mt-3">
+        <span className="text-white text-sm font-medium">
+          Step {currentStep}: {labels[currentStep - 1] || ''}
+        </span>
       </div>
     </div>
   )

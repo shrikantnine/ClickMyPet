@@ -47,7 +47,39 @@ export default function StickyCTA({ alwaysVisible = false }: StickyCtaProps = {}
       )}
     >
       <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
+        {/* Mobile: Stack vertically */}
+        <div className="flex flex-col items-center gap-2 md:hidden">
+          {/* CTA Button - Centered */}
+          <Link href="/onboarding">
+            <Button variant="moody-fill" className="font-bold text-sm px-6">
+              Create Your Pet Portraits Now
+            </Button>
+          </Link>
+
+          {/* Rating and Reviews - Below button */}
+          <div className="flex items-center gap-2">
+            <div className="flex">
+              <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
+              <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
+              <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
+              <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
+              <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
+            </div>
+            <span className="text-xs text-gray-800">
+              4.8/5 1,249+ Reviews
+            </span>
+          </div>
+        </div>
+
+        {/* Desktop: Horizontal layout */}
+        <div className="hidden md:flex items-center justify-between">
+          {/* CTA Button */}
+          <Link href="/onboarding">
+            <Button variant="moody-fill" className="font-bold text-sm px-6">
+              Create Your Pet Portraits Now
+            </Button>
+          </Link>
+
           {/* Rating and Reviews */}
           <div className="flex items-center gap-2">
             <div className="flex">
@@ -57,20 +89,10 @@ export default function StickyCTA({ alwaysVisible = false }: StickyCtaProps = {}
               <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
               <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
             </div>
-            <span className="text-xs text-gray-800 hidden sm:inline">
+            <span className="text-xs text-gray-800">
               4.8/5 (1,249+) reviews
             </span>
-            <span className="text-xs text-gray-800 sm:hidden">
-              4.8/5 (1,249+)
-            </span>
           </div>
-
-          {/* CTA Button */}
-          <Link href="/onboarding">
-            <Button variant="moody-fill" className="font-bold text-sm px-6">
-              ✨ Create Your Portrait
-            </Button>
-          </Link>
         </div>
       </div>
     </div>

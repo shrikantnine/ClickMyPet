@@ -105,6 +105,7 @@ export default function HeroSection() {
                     md:h-[31vh] 
                     md:w-[24.8vh]
                     object-cover
+                    card-shadow
                   " // vh for height, width for 4:5 ratio
                 />
               </div>
@@ -139,6 +140,7 @@ export default function HeroSection() {
                     md:h-[31vh] 
                     md:w-[24.8vh]
                     object-cover
+                    card-shadow
                   "
                 />
               </div>
@@ -173,6 +175,7 @@ export default function HeroSection() {
                     md:h-[31vh] 
                     md:w-[24.8vh]
                     object-cover
+                    card-shadow
                   "
                 />
               </div>
@@ -184,11 +187,11 @@ export default function HeroSection() {
       {/* Glass Morphism Text Box */}
       <div className="relative z-10 container mx-auto px-4 flex items-center justify-center min-h-screen">
         <div className="bg-white/20 backdrop-blur-lg rounded-2xl border border-white/30 p-6 shadow-lg md:max-w-lg mx-auto">
-          <h1 className="text-2xl md:text-3xl font-bold leading-tight text-black text-center">
+          <h1 className="text-2xl md:text-3xl font-bold leading-tight text-black/95 text-center">
             Transform Your Pet Photos into Amazing Portraits
           </h1>
-          <p className="mt-4 text-lg text-black text-center text-justify">
-            Instantly generate stunning portraits with unique styles and fun accessories
+          <p className="mt-4 text-lg text-black/90 text-center text-justify">
+            Instantly generate an album of portraits with unique styles and fun accessories
           </p>
           <div className="mt-8 flex justify-center">
             <Link href="/onboarding">
@@ -197,7 +200,7 @@ export default function HeroSection() {
                 size="lg"
                 className="w-full md:w-auto text-lg px-8 py-6 font-bold"
               >
-                ✨ Create Your Portrait
+                Create Your Pet Portraits Now
               </Button>
             </Link>
           </div>
@@ -210,12 +213,9 @@ export default function HeroSection() {
               <Star className="h-5 w-5 text-yellow-400" fill="currentColor" />
             </div>
             <span className="text-sm text-gray-900 text-center">
-              4.8/5 (1,249+) happy pet parents
+              4.8/5 (1,250+ Happy Pet Parents)
             </span>
           </div>
-          <p className="mt-4 text-sm text-black/70 text-center font-medium">
-            🎁 No credit card required
-          </p>
         </div>
       </div>
     </section>
