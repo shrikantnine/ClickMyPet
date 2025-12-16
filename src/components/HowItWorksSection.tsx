@@ -5,31 +5,25 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { SPACING } from '@/lib/utils'
 
-// Using showcase-quality images - 1 Dog, 1 Cat, 1 Fish, 1 Horse (4 total)
+// Using showcase-quality images - 1 Dog, 1 Cat, 1 Fish (3 total)
 const steps = [
   {
     number: '01',
-    title: 'Upload Your Pet Photo',
-    description: 'Select a high-quality photo of your pet to get started',
+    title: 'Select Customisation',
+    description: 'Choose from 15+ artistic styles, 25+ backgrounds, and fun accessories to personalize your pet\'s portrait',
     image: '/Dog/Labrador Retriever Water Play.png'
   },
   {
     number: '02',
-    title: 'Choose Your Style',
-    description: 'Pick from dozens of professional styles - from realistic to artistic',
+    title: 'Upload Pet Photos',
+    description: 'Select 5 high-quality photos of your pet to generate the best possible results',
     image: '/Cat/Persian Cat Superhero Superman.png'
   },
   {
     number: '03',
-    title: 'Select Background & Accessories',
-    description: 'Customize backgrounds and add fun accessories to match your pet\'s personality',
+    title: 'Download in Seconds',
+    description: 'Get professional AI-generated pet photos ready to share. Download as ZIP with all your creations!',
     image: '/Other/Goldfish Portrait Aquarium 2.png'
-  },
-  {
-    number: '04',
-    title: 'Download Your AI Masterpiece',
-    description: 'Get your professional pet photos delivered in secondss, ready to share!',
-    image: '/Other/American Paint Horse Portrait.png'
   }
 ]
 
@@ -43,7 +37,7 @@ export default function HowItWorksSection() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Get Started in 4 Easy Steps
+            Get Started in 3 Easy Steps
           </h2>
           <p className="text-lg text-gray-800 max-w-2xl mx-auto">
             Transform your pet photos into stunning portraits in just seconds. Our AI does all the heavy lifting!
@@ -51,7 +45,7 @@ export default function HowItWorksSection() {
         </div>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {steps.map((step, index) => (
             <div key={index} className="relative group">
               {/* Step Image */}

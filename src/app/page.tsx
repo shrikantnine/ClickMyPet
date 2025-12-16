@@ -11,7 +11,7 @@ import TrustBadges from '@/components/TrustBadges'
 import FAQSection from '@/components/FAQSection'
 import ClosingSection from '@/components/ClosingSection'
 import Footer from '@/components/Footer'
-import ExitIntentPopup from '@/components/ExitIntentPopup'
+import SignupPopupManager from '@/components/SignupPopupManager'
 
 export const metadata: Metadata = {
   title: "PetPX - AI Pet Photo Generator | Create Professional Pet Portraits Instantly",
@@ -58,7 +58,7 @@ export default function Home() {
       
       <Footer />
       <StickyCTA />
-      <ExitIntentPopup />
+      <SignupPopupManager />
     </div>
   )
 }

@@ -425,6 +425,29 @@ function CheckoutContent() {
             </div>
           </aside>
         </div>
+
+        {/* Temporary test button to bypass payment */}
+        <div className="mt-8 border-t border-gray-200 pt-6">
+          <div className="mx-auto max-w-md text-center">
+            <p className="mb-3 text-xs text-gray-500 uppercase tracking-wide">Testing Mode</p>
+            <Button
+              onClick={() => {
+                // Store test mode flag and selected plan in session storage
+                if (typeof window !== 'undefined') {
+                  sessionStorage.setItem('testMode', 'true')
+                  sessionStorage.setItem('testPlan', selectedPlan)
+                }
+                // Go directly to dashboard
+                router.push('/dashboard?test=true')
+              }}
+              variant="outline"
+              className="w-full border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium"
+            >
+              🧪 Bypass Payment (Test Mode)
+            </Button>
+            <p className="mt-2 text-xs text-gray-400">Skip payment for testing purposes</p>
+          </div>
+        </div>
       </main>
     </div>
   )

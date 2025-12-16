@@ -88,7 +88,7 @@ export default function TestimonialSection() {
                 </svg>
               ))}
             </div>
-            <span className="text-gray-700 font-semibold">4.8/5 from 2,847 reviews</span>
+            <span className="text-gray-700 font-semibold">4.8/5 from 1,250 reviews</span>
           </div>
         </div>
 
@@ -190,7 +190,7 @@ export default function TestimonialSection() {
             <p className="text-gray-600">Photos Generated</p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-black/90">2,847</p>
+            <p className="text-3xl font-bold text-black/90">1,250</p>
             <p className="text-gray-600">Happy Customers</p>
           </div>
           <div>

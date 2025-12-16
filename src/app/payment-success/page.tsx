@@ -10,15 +10,15 @@ function PaymentSuccessContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const subscriptionId = searchParams.get('subscription')
-  const [countdown, setCountdown] = useState(5)
+  const [countdown, setCountdown] = useState(3)
 
   useEffect(() => {
-    // Countdown redirect
+    // Redirect to dashboard immediately after brief success display
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
       return () => clearTimeout(timer)
     } else {
-      // Redirect to user dashboard after successful payment
+      // Redirect to user dashboard - user is already authenticated from onboarding
       router.push('/dashboard')
     }
   }, [countdown, router])
@@ -106,7 +106,7 @@ function PaymentSuccessContent() {
 
           {/* Auto-redirect countdown */}
           <p className="text-sm text-gray-600 mt-6">
-            Redirecting to your dashboard in {countdown} seconds...
+            Taking you to your dashboard in {countdown}...
           </p>
         </div>
 

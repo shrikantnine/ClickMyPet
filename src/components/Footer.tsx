@@ -60,10 +60,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">CMP</span>
-              </div>
+            <Link href="/" className="flex items-center space-x-3 mb-4">
+              <img src="/heading.png" alt="Click My Pet" className="w-10 h-10 object-cover rounded-md" />
               <span className="font-bold text-xl">Click My Pet</span>
             </Link>
           </div>

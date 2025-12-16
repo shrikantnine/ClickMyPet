@@ -89,6 +89,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Favicon / App icon */}
+        <link rel="icon" href="/heading.png" />
+        <link rel="apple-touch-icon" href="/heading.png" />
         {/* Organization Schema */}
         <script
           type="application/ld+json"
