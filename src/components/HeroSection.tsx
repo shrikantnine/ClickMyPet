@@ -75,20 +75,20 @@ const heroImages = {
 }
 export default function HeroSection() {
   return (
-    <section className="relative w-screen h-screen overflow-hidden bg-white-100">
-      <div className="absolute inset-0 flex flex-col w-full h-full gap-1">
+    <section className="relative w-screen h-screen overflow-hidden bg-white">
+      <div className="absolute inset-0 flex flex-col w-full h-full gap-0">
         {/* Row 1 */}
-        <div className="flex-1 w-full h-full">
+        <div className="flex-none w-full h-[calc(100vh/3+2.67vh)]">
           <Marquee
             speed={50}
             direction="left"
             gradient={false}
-            className="h-full w-full flex items-center"
+            className="h-full w-full"
           >
             {heroImages.row1.map((image, index) => (
               <div
                 key={`row1-${image.id}`}
-                className="flex-shrink-0"
+                className="flex-shrink-0 h-full flex items-stretch"
                 style={{ margin: '0 0.5rem' }} // uniform small gap
               >
                 <Image
@@ -100,12 +100,11 @@ export default function HeroSection() {
                   priority={index < 3}
                   className="
                     rounded-sm
-                    h-[31vh] 
-                    w-[24.8vh] 
-                    md:h-[31vh] 
-                    md:w-[24.8vh]
+                    h-full
+                    w-[calc((100vh/3+2.67vh)*0.8)]
                     object-cover
-                    card-shadow
+                    card-shadow-hover
+                    block
                   " // vh for height, width for 4:5 ratio
                 />
               </div>
@@ -113,18 +112,18 @@ export default function HeroSection() {
           </Marquee>
         </div>
         {/* Row 2 */}
-        <div className="flex-1 w-full h-full">
+        <div className="flex-none w-full h-[calc(100vh/3+2.67vh)] -mt-[4vh]">
           <Marquee
             speed={50}
             direction="left"
             gradient={false}
             delay={-2}
-            className="h-full w-full flex items-center"
+            className="h-full w-full"
           >
             {heroImages.row2.map((image) => (
               <div
                 key={`row2-${image.id}`}
-                className="flex-shrink-0"
+                className="flex-shrink-0 h-full flex items-stretch"
                 style={{ margin: '0 0.5rem' }}
               >
                 <Image
@@ -135,12 +134,11 @@ export default function HeroSection() {
                   loading="lazy"
                   className="
                     rounded-sm
-                    h-[31vh] 
-                    w-[24.8vh]
-                    md:h-[31vh] 
-                    md:w-[24.8vh]
+                    h-full
+                    w-[calc((100vh/3+2.67vh)*0.8)]
                     object-cover
-                    card-shadow
+                    card-shadow-hover
+                    block
                   "
                 />
               </div>
@@ -148,18 +146,18 @@ export default function HeroSection() {
           </Marquee>
         </div>
         {/* Row 3 */}
-        <div className="flex-1 w-full h-full">
+        <div className="flex-none w-full h-[calc(100vh/3+2.67vh)] -mt-[4vh]">
           <Marquee
             speed={50}
             direction="left"
             gradient={false}
             delay={-4}
-            className="h-full w-full flex items-center"
+            className="h-full w-full"
           >
             {heroImages.row3.map((image) => (
               <div
                 key={`row3-${image.id}`}
-                className="flex-shrink-0"
+                className="flex-shrink-0 h-full flex items-stretch"
                 style={{ margin: '0 0.5rem' }}
               >
                 <Image
@@ -170,12 +168,11 @@ export default function HeroSection() {
                   loading="lazy"
                   className="
                     rounded-sm
-                    h-[31vh] 
-                    w-[24.8vh]
-                    md:h-[31vh] 
-                    md:w-[24.8vh]
+                    h-full
+                    w-[calc((100vh/3+2.67vh)*0.8)]
                     object-cover
-                    card-shadow
+                    card-shadow-hover
+                    block
                   "
                 />
               </div>

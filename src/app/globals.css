@@ -85,3 +85,24 @@ body {
   box-shadow: 0px 6px 6px #00000035, 0px 18px 18px #00000020;
   transform: translateY(-2px);
 }
+
+/* Hover-only shadow (no base shadow) */
+.card-shadow-hover-only {
+  box-shadow: none;
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.card-shadow-hover-only:hover {
+  box-shadow: 0px 6px 6px #00000035, 0px 18px 18px #00000020;
+  transform: translateY(-2px);
+}
+
+/* Hide scrollbar but keep scrolling enabled */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge legacy */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}

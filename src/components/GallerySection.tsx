@@ -2,9 +2,113 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import Marquee from 'react-fast-marquee'
+import { useEffect, useMemo, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { SPACING } from '@/lib/utils'
+
+function AutoScrollRow({
+  images,
+  speedPxPerSecond,
+  direction,
+  delaySeconds = 0,
+}: {
+  images: Array<{ id: string; src: string; alt: string }>
+  speedPxPerSecond: number
+  direction: 'left' | 'right'
+  delaySeconds?: number
+}) {
+  const scrollerRef = useRef<HTMLDivElement | null>(null)
+  const rafIdRef = useRef<number | null>(null)
+  const lastTimeRef = useRef<number | null>(null)
+
+  const doubledImages = useMemo(() => [...images, ...images], [images])
+
+  useEffect(() => {
+    const scroller = scrollerRef.current
+    if (!scroller) return
+
+    const halfWidth = () => scroller.scrollWidth / 2
+
+    // If scrolling to the right, start in the middle so there's content to the left.
+    if (direction === 'right') {
+      scroller.scrollLeft = halfWidth()
+    }
+
+    let isCancelled = false
+
+    const startAt = performance.now() + delaySeconds * 1000
+
+    const step = (now: number) => {
+      if (isCancelled) return
+
+      if (now < startAt) {
+        rafIdRef.current = requestAnimationFrame(step)
+        return
+      }
+
+      const last = lastTimeRef.current ?? now
+      const dtMs = now - last
+      lastTimeRef.current = now
+
+      const delta = (speedPxPerSecond * dtMs) / 1000
+      const dir = direction === 'left' ? 1 : -1
+      scroller.scrollLeft += dir * delta
+
+      const hw = halfWidth()
+      if (hw > 0) {
+        if (direction === 'left' && scroller.scrollLeft >= hw) {
+          scroller.scrollLeft -= hw
+        } else if (direction === 'right' && scroller.scrollLeft <= 0) {
+          scroller.scrollLeft += hw
+        }
+      }
+
+      rafIdRef.current = requestAnimationFrame(step)
+    }
+
+    rafIdRef.current = requestAnimationFrame(step)
+
+    return () => {
+      isCancelled = true
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
+      rafIdRef.current = null
+      lastTimeRef.current = null
+    }
+  }, [direction, delaySeconds, speedPxPerSecond, doubledImages.length])
+
+  return (
+    <div
+      ref={scrollerRef}
+      className="h-full w-full overflow-x-auto overflow-y-hidden leading-none hide-scrollbar"
+    >
+      <div className="flex h-full items-center w-max">
+        {doubledImages.map((image, idx) => (
+          <div
+            // Ensure uniqueness even when duplicated
+            key={`${image.id}-${idx}`}
+            className="flex-shrink-0 h-full flex items-center"
+            style={{ margin: '0 0.3rem' }}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={250}
+              height={310}
+              loading="lazy"
+              className="
+                rounded-sm card-shadow-hover-only
+                h-[31vh] w-[24.8vh]
+                md:h-[31vh] md:w-[24.8vh]
+                object-cover
+                block
+              "
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 // Gallery photos - Target distribution: 16 Dogs, 14 Cats, 3 Fish, 2 Birds, 1 Horse (36 total) - evenly distributed
 const galleryPhotos = [
@@ -76,42 +180,18 @@ export default function GallerySection() {
       </div>
 
       {/* Gallery Marquee Rows */}
-      <div className="flex-1 w-full overflow-hidden flex flex-col gap-2">
+      <div className="flex-1 w-full overflow-hidden flex flex-col gap-4">
         {galleryRows.map((row, rowIndex) => (
           <div 
             key={rowIndex}
-            className="w-full min-h-[32vh] md:flex-1 md:min-h-0"
+            className="w-full flex-none h-[31vh]"
           >
-            <Marquee
-              speed={42}
+            <AutoScrollRow
+              images={row}
+              speedPxPerSecond={42}
               direction="left"
-              gradient={false}
-              // Apply negative delay for row 2 and row 3 as per rule
-              delay={rowIndex === 1 ? -2 : rowIndex === 2 ? -4 : 0}
-              className="h-full w-full flex items-center"
-            >
-              {row.map((image) => (
-                <div
-                  key={image.id}
-                  className="flex-shrink-0"
-                  style={{ margin: '0 0.3rem' }} // uniform small horizontal gap
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    width={250}
-                    height={310}
-                    loading="lazy"
-                    className="
-                      rounded-sm card-shadow-hover transition-shadow duration-300
-                      h-[31vh] w-[24.8vh]
-                      md:h-[31vh] md:w-[24.8vh]
-                      object-cover
-                    "
-                  />
-                </div>
-              ))}
-            </Marquee>
+              delaySeconds={rowIndex === 1 ? 2 : rowIndex === 2 ? 4 : 0}
+            />
           </div>
         ))}
       </div>

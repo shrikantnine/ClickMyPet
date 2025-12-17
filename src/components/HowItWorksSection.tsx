@@ -49,13 +49,13 @@ export default function HowItWorksSection() {
           {steps.map((step, index) => (
             <div key={index} className="relative group">
               {/* Step Image */}
-              <div className="relative aspect-[4/5] mb-6 rounded-sm overflow-hidden">
+              <div className="relative aspect-[4/5] mb-6 rounded-sm overflow-hidden card-shadow-hover transition-shadow duration-300">
                 <Image
                   src={step.image}
                   alt={step.title}
                   width={400}
                   height={500}
-                  className="w-full h-full transition-transform duration-300 group-hover:scale-105 object-cover"
+                  className="w-full h-full transition-transform duration-300 group-hover:scale-105 object-cover block"
                 />
                 {/* Step Number Overlay */}
                 <div className="absolute top-4 left-4 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
