@@ -11,19 +11,19 @@ const steps = [
     number: '01',
     title: 'Select Customisation',
     description: 'Choose from 15+ artistic styles, 25+ backgrounds, and fun accessories to personalize your pet\'s portrait',
-    image: '/Dog/Labrador Retriever Water Play.png'
+    video: '/how-it-works/choose-your-favorite-styles.mp4'
   },
   {
     number: '02',
     title: 'Upload Pet Photos',
     description: 'Select 5 high-quality photos of your pet to generate the best possible results',
-    image: '/Cat/Persian Cat Superhero Superman.png'
+    video: '/how-it-works/upload-your-pet-photos.mp4'
   },
   {
     number: '03',
     title: 'Download in Seconds',
     description: 'Get professional AI-generated pet photos ready to share. Download as ZIP with all your creations!',
-    image: '/Other/Goldfish Portrait Aquarium 2.png'
+    video: '/how-it-works/download-pet-portraits.mp4'
   }
 ]
 
@@ -50,13 +50,26 @@ export default function HowItWorksSection() {
             <div key={index} className="relative group">
               {/* Step Image */}
               <div className="relative aspect-[4/5] mb-6 rounded-sm overflow-hidden card-shadow-hover transition-shadow duration-300">
-                <Image
-                  src={step.image}
-                  alt={step.title}
-                  width={400}
-                  height={500}
-                  className="w-full h-full transition-transform duration-300 group-hover:scale-105 object-cover block"
-                />
+                {'video' in step ? (
+                  <video
+                    className="w-full h-full transition-transform duration-300 group-hover:scale-105 object-cover block"
+                    src={step.video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-label={step.title}
+                  />
+                ) : (
+                  <Image
+                    src={step.image}
+                    alt={step.title}
+                    width={400}
+                    height={500}
+                    className="w-full h-full transition-transform duration-300 group-hover:scale-105 object-cover block"
+                  />
+                )}
                 {/* Step Number Overlay */}
                 <div className="absolute top-4 left-4 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
                   {step.number}

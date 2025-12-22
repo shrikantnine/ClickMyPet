@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://petpx.com'
+  const baseUrl = 'https://clickmypet.com'
   const currentDate = new Date().toISOString()
 
   // Blog posts data (sync with blog/page.tsx)
@@ -34,12 +34,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/gallery`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/try-free`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
       priority: 0.9,
     },
 

@@ -322,7 +322,7 @@ export default function ReferralPage() {
                 <h3 className="text-2xl font-bold text-black">Referral Links</h3>
               </div>
               <div className="bg-black/5 backdrop-blur-sm rounded-xl p-4 font-mono text-base mb-4 border border-black/10">
-                <span className="text-black">petpx.com/ref/</span><span className="text-blue-600 font-bold">YOURNAME</span>
+                <span className="text-black">clickmypet.com/ref/</span><span className="text-blue-600 font-bold">YOURNAME</span>
               </div>
               <p className="text-sm text-black/70">120-day cookie • Automatic attribution</p>
             </div>
@@ -464,7 +464,7 @@ export default function ReferralPage() {
             </div>
             <div className="text-sm text-black/70">
               <span className="font-mono bg-white/60 px-4 py-2 rounded-lg border border-black/10">
-                petpx.com/ref/{referralCode}
+                clickmypet.com/ref/{referralCode}
               </span>
             </div>
           </div>

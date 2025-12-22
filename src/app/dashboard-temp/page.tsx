@@ -32,6 +32,30 @@ const PET_TYPES = [
   { id: 'other', label: 'Other', emoji: '🐾' },
 ]
 
+const DEMO_IMAGE_SOURCES = [
+  { url: '/dashboard-demo/generation-02c39bab-be45-47ab-8246-47dc2537a95e.png', style: 'generation-02c39bab-be45-47ab-8246-47dc2537a95e' },
+  { url: '/dashboard-demo/generation-0a339724-0558-41a5-9d77-2cf223469050.png', style: 'generation-0a339724-0558-41a5-9d77-2cf223469050' },
+  { url: '/dashboard-demo/generation-0e367d0f-e4ad-448a-b5b9-8f06e3e544fe.png', style: 'generation-0e367d0f-e4ad-448a-b5b9-8f06e3e544fe' },
+  { url: '/dashboard-demo/generation-15587aac-3e5d-4e27-8db0-1f8e25107cee.png', style: 'generation-15587aac-3e5d-4e27-8db0-1f8e25107cee' },
+  { url: '/dashboard-demo/generation-3f82854d-cfeb-4887-890e-5933b05fa974.png', style: 'generation-3f82854d-cfeb-4887-890e-5933b05fa974' },
+  { url: '/dashboard-demo/generation-422caeac-b0e0-4b0f-b307-7cd9940d36c2.png', style: 'generation-422caeac-b0e0-4b0f-b307-7cd9940d36c2' },
+  { url: '/dashboard-demo/generation-495ac204-51db-49c3-b0e7-52078b4d2d17.png', style: 'generation-495ac204-51db-49c3-b0e7-52078b4d2d17' },
+  { url: '/dashboard-demo/generation-5f38e256-ed59-4689-8794-bf20c5f75b81.png', style: 'generation-5f38e256-ed59-4689-8794-bf20c5f75b81' },
+  { url: '/dashboard-demo/generation-604c6ce7-1f5a-4d3e-bd39-4cb1865e0a5e.png', style: 'generation-604c6ce7-1f5a-4d3e-bd39-4cb1865e0a5e' },
+  { url: '/dashboard-demo/generation-6eece98b-ebf0-4125-a194-43b89e45ed7c.png', style: 'generation-6eece98b-ebf0-4125-a194-43b89e45ed7c' },
+  { url: '/dashboard-demo/generation-6f8d9d89-75e6-49b0-aef3-51873744d78a.png', style: 'generation-6f8d9d89-75e6-49b0-aef3-51873744d78a' },
+  { url: '/dashboard-demo/generation-7a3c46a9-307c-4e96-8dcf-feef5a419398.png', style: 'generation-7a3c46a9-307c-4e96-8dcf-feef5a419398' },
+  { url: '/dashboard-demo/generation-8257083d-cf8d-4933-a2c0-efeb8cb98933.png', style: 'generation-8257083d-cf8d-4933-a2c0-efeb8cb98933' },
+  { url: '/dashboard-demo/generation-82aa0ee2-408d-4bd0-a22b-7f2dff79714a.png', style: 'generation-82aa0ee2-408d-4bd0-a22b-7f2dff79714a' },
+  { url: '/dashboard-demo/generation-8e41ddde-f36c-4b69-86d9-54b6c2ee1510.png', style: 'generation-8e41ddde-f36c-4b69-86d9-54b6c2ee1510' },
+  { url: '/dashboard-demo/generation-9eeb4e00-90c2-4c09-804b-c978f6e85c3f.png', style: 'generation-9eeb4e00-90c2-4c09-804b-c978f6e85c3f' },
+  { url: '/dashboard-demo/generation-a0a61ff4-e2f9-41da-84ec-b61dbb33c0f6.png', style: 'generation-a0a61ff4-e2f9-41da-84ec-b61dbb33c0f6' },
+  { url: '/dashboard-demo/generation-b262279f-cc19-4a2d-8729-f0074595817a.png', style: 'generation-b262279f-cc19-4a2d-8729-f0074595817a' },
+  { url: '/dashboard-demo/generation-dc97de2f-5484-4286-95a7-193a4a891403.png', style: 'generation-dc97de2f-5484-4286-95a7-193a4a891403' },
+  { url: '/dashboard-demo/generation-ef3d4e7f-4687-4764-a4be-b8266c22d9d9.png', style: 'generation-ef3d4e7f-4687-4764-a4be-b8266c22d9d9' },
+  { url: '/dashboard-demo/generation-f36e724f-9592-44d9-9df8-ddc351d376c9.png', style: 'generation-f36e724f-9592-44d9-9df8-ddc351d376c9' },
+]
+
 interface GeneratedImage {
   id: string
   url: string
@@ -68,6 +92,7 @@ export default function UserDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isTestMode, setIsTestMode] = useState(false)
+  const [showAuthBypass, setShowAuthBypass] = useState(false)
   
   // User data
   const [userId, setUserId] = useState<string | null>(null)
@@ -96,6 +121,24 @@ export default function UserDashboard() {
   useEffect(() => {
     loadUserData()
   }, [])
+
+  const getDemoImages = (): GeneratedImage[] => {
+    return DEMO_IMAGE_SOURCES.map((img, idx) => ({
+      id: `demo-${idx}-${img.style}`,
+      url: img.url,
+      style: img.style,
+      selected: false,
+    }))
+  }
+
+  const enterDemoMode = async () => {
+    if (typeof window === 'undefined') return
+    sessionStorage.setItem('testMode', 'true')
+    sessionStorage.setItem('testPlan', 'pro')
+    setShowAuthBypass(false)
+    await loadUserData()
+  }
+
 
   const loadUserData = async () => {
     try {
@@ -137,6 +180,8 @@ export default function UserDashboard() {
           console.error('Failed to load preferences:', e)
         }
         
+        setGeneratedImages(getDemoImages())
+        setCurrentStep('results')
         setIsLoading(false)
         return
       }
@@ -145,7 +190,9 @@ export default function UserDashboard() {
       const { data: { user }, error: authError } = await supabase.auth.getUser()
       
       if (authError || !user) {
-        router.push('/login')
+        // TEMP route: don't block on login; allow demo-mode entry instead
+        setShowAuthBypass(true)
+        setIsLoading(false)
         return
       }
 
@@ -496,6 +543,27 @@ export default function UserDashboard() {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-700 font-medium">Loading your studio...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (showAuthBypass) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-2xl p-8 card-shadow text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Temporary Dashboard</h1>
+          <p className="text-gray-600 mb-6">
+            Login is required for the real dashboard. Use demo mode to review the UI and test downloads.
+          </p>
+          <Button variant="moody-fill" className="w-full" onClick={enterDemoMode}>
+            Enter Demo Mode (Bypass Login)
+          </Button>
+          <div className="mt-4">
+            <Link href="/" className="text-sm text-gray-600 hover:text-gray-800">
+              Back to home
+            </Link>
+          </div>
         </div>
       </div>
     )

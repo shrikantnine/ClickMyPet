@@ -2,29 +2,29 @@
 // This component provides search engines with detailed product, service, and business information
 
 export function getStructuredData() {
-  const baseUrl = 'https://petpx.com'
+  const baseUrl = 'https://clickmypet.com'
 
   // 1. Organization Schema - Company Information
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${baseUrl}/#organization`,
-    name: 'PetPX',
+    name: 'Click My Pet',
     alternateName: 'Click My Pet',
     url: baseUrl,
-    logo: `${baseUrl}/logo.png`,
+    logo: `${baseUrl}/heading.png`,
     description: 'AI-powered pet portrait generation service offering professional quality pet photos in 15+ artistic styles',
-    email: 'support@petpx.com',
+    email: 'support@clickmypet.com',
     foundingDate: '2024',
     sameAs: [
-      'https://twitter.com/petpx',
-      'https://facebook.com/petpx',
-      'https://instagram.com/petpx',
+      'https://twitter.com/clickmypet',
+      'https://facebook.com/clickmypet',
+      'https://instagram.com/clickmypet',
     ],
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
-      email: 'support@petpx.com',
+      email: 'support@clickmypet.com',
       availableLanguage: ['English'],
     },
   }
@@ -35,7 +35,7 @@ export function getStructuredData() {
     '@type': 'WebSite',
     '@id': `${baseUrl}/#website`,
     url: baseUrl,
-    name: 'PetPX',
+    name: 'Click My Pet',
     description: 'Transform your pet photos into stunning AI portraits with professional quality',
     publisher: {
       '@id': `${baseUrl}/#organization`,
@@ -88,12 +88,12 @@ export function getStructuredData() {
     '@context': 'https://schema.org',
     '@type': 'Product',
     '@id': `${baseUrl}/#product-starter`,
-    name: 'PetPX Starter Plan',
+    name: 'Click My Pet Starter Plan',
     description: 'Perfect for trying out AI pet portraits. Generate 20 high-quality images in 2 styles with 2 background choices.',
     image: `${baseUrl}/og-image.png`,
     brand: {
       '@type': 'Brand',
-      name: 'PetPX',
+      name: 'Click My Pet',
     },
     offers: {
       '@type': 'Offer',
@@ -144,12 +144,12 @@ export function getStructuredData() {
     '@context': 'https://schema.org',
     '@type': 'Product',
     '@id': `${baseUrl}/#product-pro`,
-    name: 'PetPX Pro Plan',
+    name: 'Click My Pet Pro Plan',
     description: 'Most popular choice for pet portraits. Generate 40 premium images in 8 styles with all backgrounds, 2K resolution, and priority support.',
     image: `${baseUrl}/og-image.png`,
     brand: {
       '@type': 'Brand',
-      name: 'PetPX',
+      name: 'Click My Pet',
     },
     offers: {
       '@type': 'Offer',
@@ -210,12 +210,12 @@ export function getStructuredData() {
     '@context': 'https://schema.org',
     '@type': 'Product',
     '@id': `${baseUrl}/#product-max`,
-    name: 'PetPX Max Plan',
+    name: 'Click My Pet Max Plan',
     description: 'Best value package with 100 stunning images in all 15+ styles, all 25+ backgrounds, 4K resolution, commercial usage rights, and custom style requests.',
     image: `${baseUrl}/og-image.png`,
     brand: {
       '@type': 'Brand',
-      name: 'PetPX',
+      name: 'Click My Pet',
     },
     offers: {
       '@type': 'Offer',
@@ -286,7 +286,7 @@ export function getStructuredData() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Supported Pet Species',
-    description: 'All pet species supported by PetPX AI portrait generator',
+    description: 'All pet species supported by Click My Pet AI portrait generator',
     numberOfItems: 6,
     itemListElement: [
       {
@@ -507,10 +507,10 @@ export function getStructuredData() {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'What is PetPX?',
+        name: 'What is Click My Pet?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'PetPX is an AI-powered pet portrait generator that transforms your pet photos into professional-quality portraits in 15+ artistic styles. Simply upload a photo, choose your style and background, and receive stunning AI-generated images in minutes.',
+          text: 'Click My Pet is an AI-powered pet portrait generator that transforms your pet photos into professional-quality portraits in 15+ artistic styles. Simply upload a photo, choose your style and background, and receive stunning AI-generated images in minutes.',
         },
       },
       {
@@ -523,10 +523,10 @@ export function getStructuredData() {
       },
       {
         '@type': 'Question',
-        name: 'How much does PetPX cost?',
+        name: 'How much does Click My Pet cost?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'PetPX offers three plans: Starter ($15 for 20 images), Pro ($29 for 40 images - most popular), and Max ($49 for 100 images). All plans include multiple style options, backgrounds, and high-resolution downloads. We also offer a free trial to test the service.',
+          text: 'Click My Pet offers three plans: Starter ($15 for 20 images), Pro ($29 for 40 images - most popular), and Max ($49 for 100 images). All plans include multiple style options, backgrounds, and high-resolution downloads.',
         },
       },
       {

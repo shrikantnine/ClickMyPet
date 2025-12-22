@@ -7,7 +7,7 @@ import SolidPlaceholder from '@/components/SolidPlaceholder'
 import { blogPlaceholders } from '@/lib/placeholders'
 
 export const metadata: Metadata = {
-  title: "Pet Photography Tips & AI Guide | PetPX Blog",
+  title: "Pet Photography Tips & AI Guide | Click My Pet Blog",
   description: "Expert pet photography tips, AI photo generation guides & creative ideas. Learn how to get stunning dog & cat portraits. Free guides & tutorials!",
   keywords: [
     "pet photography tips",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "AI portrait tutorial"
   ],
   openGraph: {
-    title: "PetPX Blog - Pet Photography Tips & AI Guides",
+    title: "Click My Pet Blog - Pet Photography Tips & AI Guides",
     description: "Expert guides on pet photography and AI portrait generation. Free tips, tricks & creative ideas.",
     images: [{ url: "/og-blog.png" }],
   },

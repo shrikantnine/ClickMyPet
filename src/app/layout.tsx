@@ -4,6 +4,7 @@ import "./globals.css";
 import { VisitorTrackingProvider } from "@/components/VisitorTrackingProvider";
 import { CookieConsent } from "@/components/CookieConsent";
 import { getStructuredData } from "@/lib/structured-data";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PetPX - AI Pet Photo Generator | Professional Pet Portraits in Seconds",
+  title: "Click My Pet - AI Pet Photo Generator | Professional Pet Portraits in Seconds",
   description: "Transform your pet photos into stunning AI portraits. 15+ artistic styles, 25+ backgrounds, 4K quality. Dogs, cats & more. From $15. Create yours now!",
   keywords: [
     "AI pet photo generator",
@@ -30,24 +31,24 @@ export const metadata: Metadata = {
     "watercolor pet portrait",
     "custom pet portraits"
   ],
-  authors: [{ name: "PetPX" }],
-  creator: "PetPX",
-  publisher: "PetPX",
-  metadataBase: new URL('https://petpx.com'),
+  authors: [{ name: "Click My Pet" }],
+  creator: "Click My Pet",
+  publisher: "Click My Pet",
+  metadataBase: new URL('https://clickmypet.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "PetPX - AI Pet Photo Generator | Professional Pet Portraits",
+    title: "Click My Pet - AI Pet Photo Generator | Professional Pet Portraits",
     description: "Create stunning AI pet portraits in seconds. 15+ styles, 25+ backgrounds. From $15. Create yours now!",
-    url: "https://petpx.com",
-    siteName: "PetPX",
+    url: "https://clickmypet.com",
+    siteName: "Click My Pet",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "PetPX - AI Generated Pet Portraits"
+        alt: "Click My Pet - AI Generated Pet Portraits"
       }
     ],
     locale: "en_US",
@@ -55,10 +56,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "PetPX - Turn Your Pet Photos Into AI Masterpieces",
+    title: "Click My Pet - Turn Your Pet Photos Into AI Masterpieces",
     description: "Professional AI pet portraits from $15. 15+ styles, 4K quality. Create yours today!",
     images: ["/twitter-image.png"],
-    creator: "@petpx",
+    creator: "@clickmypet",
   },
   robots: {
     index: true,
@@ -160,6 +161,7 @@ export default function RootLayout({
         <VisitorTrackingProvider />
         {children}
         <CookieConsent />
+        <Toaster position="top-right" richColors closeButton duration={4000} />
       </body>
     </html>
   );

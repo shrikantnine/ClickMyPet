@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'import { toast } from 'sonner'import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Check, ArrowRight, ArrowLeft, Lock, Zap, Mail, Eye, EyeOff } from 'lucide-react'
@@ -100,6 +99,30 @@ function OnboardingContent() {
   const [customStyleText, setCustomStyleText] = useState('')
   const [customBackgroundText, setCustomBackgroundText] = useState('')
   const [customAccessoryText, setCustomAccessoryText] = useState('')
+
+  // Check for existing session and listen for auth changes
+  useEffect(() => {
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setIsAuthenticated(true)
+        setStep(2)
+      }
+    })
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setIsAuthenticated(true)
+        setStep(2)
+        toast.success('Successfully signed in!')
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
   const isMaxUser = planId === 'ultra'
 
   const toggleSelection = (
@@ -128,26 +151,72 @@ function OnboardingContent() {
     window.history.replaceState(null, '', `/onboarding?plan=${nextPlan}`)
   }
 
-  const handleGoogleSignUp = () => {
-    // TODO: Implement Google OAuth
-    console.log('Google sign up')
-    setIsAuthenticated(true)
-    setStep(2)
+  const handleGoogleSignUp = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/onboarding`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      })
+      
+      if (error) throw error
+    } catch (error: any) {
+      console.error('Google sign up error:', error)
+      toast.error('Failed to sign in with Google. Please try again.')
+    }
   }
 
-  const handleFacebookSignUp = () => {
-    // TODO: Implement Facebook OAuth
-    console.log('Facebook sign up')
-    setIsAuthenticated(true)
-    setStep(2)
+  const handleFacebookSignUp = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'facebook',
+        options: {
+          redirectTo: `${window.location.origin}/onboarding`,
+          scopes: 'email',
+        },
+      })
+      
+      if (error) throw error
+    } catch (error: any) {
+      console.error('Facebook sign up error:', error)
+      toast.error('Failed to sign in with Facebook. Please try again.')
+    }
   }
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement email auth
-    console.log('Email auth:', formData)
-    setIsAuthenticated(true)
-    setStep(2)
+    
+    if (!formData.email) {
+      toast.error('Please enter your email address')
+      return
+    }
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOtp({
+        email: formData.email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/onboarding`,
+          data: {
+            name: formData.name,
+          },
+        },
+      })
+      
+      if (error) throw error
+      
+      toast.success('Check your email!', {
+        description: 'We sent you a magic link to sign in.'
+      })
+      setAuthMode('email-sent')
+    } catch (error: any) {
+      console.error('Email auth error:', error)
+      toast.error('Failed to send magic link. Please try again.')
+    }
   }
 
   const handleNext = () => {
@@ -202,10 +271,8 @@ function OnboardingContent() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">PX</span>
-              </div>
-              <span className="font-bold text-xl text-gray-900">PetPX</span>
+              <img src="/heading.png" alt="Click My Pet" className="w-10 h-10 object-cover rounded-md" />
+              <span className="font-bold text-xl text-gray-900">Click My Pet</span>
             </Link>
           </div>
         </div>

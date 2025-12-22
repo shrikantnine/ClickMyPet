@@ -173,7 +173,7 @@ export default function AdminDashboard() {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
     const link = document.createElement('a')
     link.href = URL.createObjectURL(blob)
-    link.download = `petpx-users-${new Date().toISOString().split('T')[0]}.csv`
+    link.download = `clickmypet-users-${new Date().toISOString().split('T')[0]}.csv`
     link.click()
     URL.revokeObjectURL(link.href)
   }
@@ -196,7 +196,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-sm text-gray-500">PetPX Analytics</p>
+              <p className="text-sm text-gray-500">Click My Pet Analytics</p>
             </div>
           </div>
           

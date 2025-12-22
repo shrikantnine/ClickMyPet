@@ -223,7 +223,7 @@ export default function ResultPage() {
                 {error}
               </p>
               <div className="flex gap-4 justify-center">
-                <Link href="/try-free">
+                <Link href="/onboarding">
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                     Try Again
                   </Button>

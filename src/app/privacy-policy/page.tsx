@@ -5,10 +5,10 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - How We Protect Your Data | PetPX",
-  description: "Learn how PetPX protects your privacy & pet photos. GDPR compliant. Secure storage, no data sharing. Read our privacy policy & cookie usage details.",
+  title: "Privacy Policy - How We Protect Your Data | Click My Pet",
+  description: "Learn how Click My Pet protects your privacy & pet photos. GDPR compliant. Secure storage, no data sharing. Read our privacy policy & cookie usage details.",
   keywords: [
-    "PetPX privacy",
+    "Click My Pet privacy",
     "pet photo privacy",
     "GDPR compliance",
     "data protection"

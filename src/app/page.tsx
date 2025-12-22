@@ -14,7 +14,7 @@ import Footer from '@/components/Footer'
 import SignupPopupManager from '@/components/SignupPopupManager'
 
 export const metadata: Metadata = {
-  title: "PetPX - AI Pet Photo Generator | Create Professional Pet Portraits Instantly",
+  title: "Click My Pet - AI Pet Photo Generator | Create Professional Pet Portraits Instantly",
   description: "Transform your dog, cat, or pet photos into stunning AI portraits. Choose from 15+ artistic styles like Disney, Watercolor & Professional. From $15. Create yours now!",
   keywords: [
     "AI pet photo generator",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "watercolor pet portrait"
   ],
   openGraph: {
-    title: "PetPX - Turn Your Pet Into An AI Masterpiece",
+    title: "Click My Pet - Turn Your Pet Into An AI Masterpiece",
     description: "Professional AI pet portraits in seconds. 15+ styles, 25+ backgrounds, 4K quality. Dogs, cats & more from $15.",
     images: [{ url: "/og-home.png" }],
   },

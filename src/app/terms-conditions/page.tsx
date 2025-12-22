@@ -5,10 +5,10 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions - Service Agreement | PetPX",
-  description: "Read PetPX terms of service, usage rights, refund policy & commercial licensing. Understand your rights when using our AI pet photo generator.",
+  title: "Terms & Conditions - Service Agreement | Click My Pet",
+  description: "Read Click My Pet terms of service, usage rights, refund policy & commercial licensing. Understand your rights when using our AI pet photo generator.",
   keywords: [
-    "PetPX terms",
+    "Click My Pet terms",
     "service terms",
     "usage rights",
     "refund policy"

@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://petpx.com'
+  const baseUrl = 'https://clickmypet.com'
 
   return {
     rules: [
@@ -33,7 +33,6 @@ export default function robots(): MetadataRoute.Robots {
           '/blog/*',
           '/gallery',
           '/onboarding',
-          '/try-free',
           '/referral',
           '/privacy-policy',
           '/terms-conditions',

@@ -66,7 +66,7 @@ export default function StickyCTA({ alwaysVisible = false }: StickyCtaProps = {}
               <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
             </div>
             <span className="text-xs text-gray-800">
-              4.8/5 1,249+ Reviews
+              4.8/5 (1,250+ Reviews)
             </span>
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function StickyCTA({ alwaysVisible = false }: StickyCtaProps = {}
               <Star className="h-4 w-4 text-yellow-400" fill="currentColor" />
             </div>
             <span className="text-xs text-gray-800">
-              4.8/5 (1,249+) reviews
+              4.8/5 (1,250+ Reviews)
             </span>
           </div>
         </div>

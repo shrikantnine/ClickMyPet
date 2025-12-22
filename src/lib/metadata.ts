@@ -7,31 +7,9 @@
 
 import type { Metadata } from 'next'
 
-// Try Free Page Metadata
-export const tryFreeMetadata: Metadata = {
-  title: "Try Free AI Pet Photo Generator | Get 1 Professional Pet Portrait",
-  description: "Try our AI pet photo generator free! Upload your dog or cat photo, choose from 8 styles & 8 backgrounds. No credit card needed. Get started now!",
-  keywords: [
-    "free AI pet photo",
-    "free pet portrait generator",
-    "try pet AI free",
-    "free dog photo AI",
-    "free cat portrait",
-    "no credit card pet AI"
-  ],
-  openGraph: {
-    title: "Try PetPX Free - Get Your First AI Pet Portrait",
-    description: "Upload your pet photo and try our AI for free. 8 styles, 8 backgrounds. No credit card required.",
-    images: [{ url: "/og-try-free.png" }],
-  },
-  alternates: {
-    canonical: '/try-free',
-  },
-}
-
 // Checkout Page Metadata
 export const checkoutMetadata: Metadata = {
-  title: "Pricing & Plans - AI Pet Photos from $15 | PetPX",
+  title: "Pricing & Plans - AI Pet Photos from $15 | Click My Pet",
   description: "Choose your plan: Starter ($15), Pro ($29), or Max ($49). Get 20-100 AI pet photos, 15+ styles, 4K quality. 100% satisfaction guarantee. Secure checkout.",
   keywords: [
     "AI pet photo pricing",
@@ -41,7 +19,7 @@ export const checkoutMetadata: Metadata = {
     "professional pet portraits price"
   ],
   openGraph: {
-    title: "PetPX Pricing - Professional AI Pet Photos from $15",
+    title: "Click My Pet Pricing - Professional AI Pet Photos from $15",
     description: "Choose from 3 plans. Get 20-100 stunning AI pet portraits. Secure payment, instant delivery.",
     images: [{ url: "/og-pricing.png" }],
   },
@@ -64,7 +42,7 @@ export const galleryMetadata: Metadata = {
     "French Bulldog portraits"
   ],
   openGraph: {
-    title: "PetPX Gallery - 470+ AI Pet Portrait Examples",
+    title: "Click My Pet Gallery - 470+ AI Pet Portrait Examples",
     description: "See stunning AI-generated portraits of dogs, cats, birds & more. 15+ artistic styles.",
     images: [{ url: "/og-gallery.png" }],
   },
@@ -75,7 +53,7 @@ export const galleryMetadata: Metadata = {
 
 // Blog Page Metadata
 export const blogMetadata: Metadata = {
-  title: "Pet Photography Tips & AI Guide | PetPX Blog",
+  title: "Pet Photography Tips & AI Guide | Click My Pet Blog",
   description: "Learn pet photography tips, AI photo generation guides, and creative ideas. Expert advice for dog & cat owners. Get the most from your pet photos!",
   keywords: [
     "pet photography tips",
@@ -86,7 +64,7 @@ export const blogMetadata: Metadata = {
     "Instagram pet photos"
   ],
   openGraph: {
-    title: "PetPX Blog - Pet Photography Tips & AI Guides",
+    title: "Click My Pet Blog - Pet Photography Tips & AI Guides",
     description: "Expert guides on pet photography and AI portrait generation. Tips, tricks & creative ideas.",
     images: [{ url: "/og-blog.png" }],
   },
@@ -97,7 +75,7 @@ export const blogMetadata: Metadata = {
 
 // Dashboard Metadata
 export const dashboardMetadata: Metadata = {
-  title: "My Dashboard - Manage AI Pet Photos | PetPX",
+  title: "My Dashboard - Manage AI Pet Photos | Click My Pet",
   description: "Access your AI pet portraits, manage subscriptions, and generate new photos. View your gallery, download images & upgrade plans.",
   robots: {
     index: false, // Don't index user dashboards
@@ -110,10 +88,10 @@ export const dashboardMetadata: Metadata = {
 
 // Login Page Metadata
 export const loginMetadata: Metadata = {
-  title: "Login - Access Your AI Pet Photos | PetPX",
+  title: "Login - Access Your AI Pet Photos | Click My Pet",
   description: "Sign in to access your AI pet portraits, manage your account & generate new photos. Secure login with magic link authentication.",
   keywords: [
-    "PetPX login",
+    "Click My Pet login",
     "pet photo account",
     "AI pet photo login"
   ],
@@ -128,16 +106,16 @@ export const loginMetadata: Metadata = {
 
 // Privacy Policy Metadata
 export const privacyMetadata: Metadata = {
-  title: "Privacy Policy - How We Protect Your Data | PetPX",
-  description: "Learn how PetPX protects your privacy. GDPR compliant. Secure photo storage, no data sharing. Read our privacy policy & cookie usage details.",
+  title: "Privacy Policy - How We Protect Your Data | Click My Pet",
+  description: "Learn how Click My Pet protects your privacy. GDPR compliant. Secure photo storage, no data sharing. Read our privacy policy & cookie usage details.",
   keywords: [
-    "PetPX privacy",
+    "Click My Pet privacy",
     "pet photo privacy",
     "GDPR compliance",
     "data protection"
   ],
   openGraph: {
-    title: "PetPX Privacy Policy",
+    title: "Click My Pet Privacy Policy",
     description: "Your privacy matters. Learn how we protect your pet photos and personal data.",
   },
   alternates: {
@@ -147,10 +125,10 @@ export const privacyMetadata: Metadata = {
 
 // Terms & Conditions Metadata
 export const termsMetadata: Metadata = {
-  title: "Terms & Conditions - Service Agreement | PetPX",
-  description: "Read PetPX terms of service, usage rights, refund policy & commercial licensing. Understand your rights when using our AI pet photo generator.",
+  title: "Terms & Conditions - Service Agreement | Click My Pet",
+  description: "Read Click My Pet terms of service, usage rights, refund policy & commercial licensing. Understand your rights when using our AI pet photo generator.",
   keywords: [
-    "PetPX terms",
+    "Click My Pet terms",
     "service terms",
     "usage rights",
     "refund policy"
@@ -162,7 +140,7 @@ export const termsMetadata: Metadata = {
 
 // Payment Success Metadata
 export const paymentSuccessMetadata: Metadata = {
-  title: "Payment Successful - Start Creating AI Pet Photos | PetPX",
+  title: "Payment Successful - Start Creating AI Pet Photos | Click My Pet",
   description: "Thank you for your purchase! Your AI pet photo credits are ready. Start generating professional portraits now.",
   robots: {
     index: false,
@@ -172,7 +150,7 @@ export const paymentSuccessMetadata: Metadata = {
 
 // Result Page Metadata
 export const resultMetadata: Metadata = {
-  title: "Your AI Pet Portrait - Download & Share | PetPX",
+  title: "Your AI Pet Portrait - Download & Share | Click My Pet",
   description: "Your AI pet portrait is ready! Download in 4K quality, share on social media, or upgrade for more styles & backgrounds.",
   robots: {
     index: false,
@@ -182,7 +160,7 @@ export const resultMetadata: Metadata = {
 
 // Onboarding Metadata
 export const onboardingMetadata: Metadata = {
-  title: "Choose Your Style - Personalize AI Pet Photos | PetPX",
+  title: "Choose Your Style - Personalize AI Pet Photos | Click My Pet",
   description: "Select your favorite styles, backgrounds & accessories. Customize your AI pet portrait generation experience in 3 easy steps.",
   robots: {
     index: false,
@@ -202,17 +180,17 @@ export const createBlogPostMetadata = (
   description: string,
   slug: string,
   publishedDate: string,
-  author: string = "PetPX Team",
+  author: string = "Click My Pet Team",
   keywords: string[] = []
 ): Metadata => ({
-  title: `${title} | PetPX Blog`,
+  title: `${title} | Click My Pet Blog`,
   description: description,
   keywords: [
     ...keywords,
     "pet photography",
     "AI pet photos",
     "pet tips",
-    "PetPX blog"
+    "Click My Pet blog"
   ],
   authors: [{ name: author }],
   openGraph: {
@@ -247,7 +225,6 @@ export const createBlogPostMetadata = (
  */
 
 export default {
-  tryFreeMetadata,
   checkoutMetadata,
   galleryMetadata,
   blogMetadata,

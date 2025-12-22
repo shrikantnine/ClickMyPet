@@ -1,5 +1,5 @@
-# robots.txt for PetPX (Click My Pet)
-# Last Updated: November 10, 2025
+# robots.txt for Click My Pet
+# Last Updated: December 22, 2025
 # 
 # This file controls how search engines crawl and index our website.
 # Following Google's best practices for optimal SEO performance.

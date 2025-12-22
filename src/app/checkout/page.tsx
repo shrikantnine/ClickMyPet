@@ -220,7 +220,7 @@ function CheckoutContent() {
         key: data.keyId,
         amount: data.amount,
         currency: data.currency,
-        name: 'PetPX',
+        name: 'Click My Pet',
         description: `${selectedPlanData.name} Plan`,
         order_id: data.orderId,
         prefill: {

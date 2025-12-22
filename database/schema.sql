@@ -1,8 +1,54 @@
--- PetPX Database Schema for Supabase
+-- Click My Pet Database Schema for Supabase
 -- Run this in your Supabase SQL editor
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- ============================================
+-- RATINGS TABLE
+-- ============================================
+
+-- Store user ratings and feedback for generated portraits
+CREATE TABLE IF NOT EXISTS public.ratings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  generation_id TEXT NOT NULL,
+  rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  improvement_areas TEXT[] DEFAULT '{}',
+  feedback TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for analytics
+CREATE INDEX IF NOT EXISTS idx_ratings_user_id ON public.ratings(user_id);
+CREATE INDEX IF NOT EXISTS idx_ratings_generation_id ON public.ratings(generation_id);
+CREATE INDEX IF NOT EXISTS idx_ratings_rating ON public.ratings(rating);
+CREATE INDEX IF NOT EXISTS idx_ratings_created_at ON public.ratings(created_at DESC);
+
+-- RLS Policies
+ALTER TABLE public.ratings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can insert their own ratings"
+  ON public.ratings
+  FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can view their own ratings"
+  ON public.ratings
+  FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Admins can view all ratings"
+  ON public.ratings
+  FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM auth.users
+      WHERE auth.users.id = auth.uid()
+      AND auth.users.raw_user_meta_data->>'role' = 'admin'
+    )
+  );
 
 -- ============================================
 -- ADMIN SETTINGS TABLE
