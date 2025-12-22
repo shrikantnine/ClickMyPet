@@ -92,8 +92,6 @@ function OnboardingContent() {
   const [selectedStyles, setSelectedStyles] = useState<string[]>([])
   const [selectedBackgrounds, setSelectedBackgrounds] = useState<string[]>([])
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([])
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
-  const [upgradeReason, setUpgradeReason] = useState('')
   
   // Custom input states for Max (Ultra) users
   const [customStyleText, setCustomStyleText] = useState('')
@@ -128,27 +126,13 @@ function OnboardingContent() {
   const toggleSelection = (
     id: string,
     current: string[],
-    setter: (value: string[]) => void,
-    limit: number,
-    type: 'styles' | 'backgrounds' | 'accessories'
+    setter: (value: string[]) => void
   ) => {
     if (current.includes(id)) {
       setter(current.filter((item) => item !== id))
     } else {
-      if (current.length < limit) {
-        setter([...current, id])
-      } else {
-        setUpgradeReason(type)
-        setShowUpgradeModal(true)
-      }
+      setter([...current, id])
     }
-  }
-
-  const handleUpgrade = () => {
-    const nextPlan = planId === 'starter' ? 'pro' : 'ultra'
-    setPlanId(nextPlan)
-    setShowUpgradeModal(false)
-    window.history.replaceState(null, '', `/onboarding?plan=${nextPlan}`)
   }
 
   const handleGoogleSignUp = async () => {
@@ -219,6 +203,23 @@ function OnboardingContent() {
     }
   }
 
+  // Auto-detect best package based on user selections
+  const detectBestPackage = (): string => {
+    const totalSelections = selectedStyles.length + selectedBackgrounds.length + selectedAccessories.length
+    const hasCustomInputs = customStyleText || customBackgroundText || customAccessoryText
+    
+    // Ultra plan if custom inputs or many selections
+    if (hasCustomInputs || totalSelections > 12) {
+      return 'ultra'
+    }
+    // Pro plan if moderate selections
+    if (totalSelections > 6) {
+      return 'pro'
+    }
+    // Starter plan for basic selections
+    return 'starter'
+  }
+
   const handleNext = () => {
     if (step === 1 && isAuthenticated) {
       setStep(2)
@@ -227,9 +228,12 @@ function OnboardingContent() {
     } else if (step === 3 && selectedBackgrounds.length > 0) {
       setStep(4)
     } else if (step === 4) {
+      // Auto-detect best package based on selections
+      const bestPackage = detectBestPackage()
+      
       // Save preferences and go to checkout
       const preferences = {
-        plan: planId,
+        plan: bestPackage,
         styles: selectedStyles,
         backgrounds: selectedBackgrounds,
         accessories: selectedAccessories,
@@ -240,7 +244,14 @@ function OnboardingContent() {
         }
       }
       sessionStorage.setItem('userPreferences', JSON.stringify(preferences))
-      router.push(`/checkout?plan=${planId}`)
+      
+      // Show which package was selected
+      const packageNames = { starter: 'Starter', pro: 'Pro', ultra: 'Ultra' }
+      toast.success(`${packageNames[bestPackage as keyof typeof packageNames]} plan selected`, {
+        description: 'Based on your customization choices'
+      })
+      
+      router.push(`/checkout?plan=${bestPackage}`)
     }
   }
 
@@ -439,32 +450,25 @@ function OnboardingContent() {
                 Choose Your Favorite Styles
               </h1>
               <p className="text-lg text-gray-700">
-                Selected: <span className="font-bold text-blue-600">{selectedStyles.length}</span> / {limits.styles}
+                Selected: <span className="font-bold text-blue-600">{selectedStyles.length}</span>
               </p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {styles.map((style) => {
-                const isMaxOnlyItem = 'maxOnly' in style && style.maxOnly
-                const isLocked = isMaxOnlyItem && !isMaxUser
                 const isSelected = selectedStyles.includes(style.id)
                 
                 return (
                   <div
                     key={style.id}
                     onClick={() => {
-                      if (isLocked) {
-                        setUpgradeReason('Custom Style (Max Exclusive)')
-                        setShowUpgradeModal(true)
-                        return
-                      }
-                      toggleSelection(style.id, selectedStyles, setSelectedStyles, limits.styles, 'styles')
+                      toggleSelection(style.id, selectedStyles, setSelectedStyles)
                     }}
                     className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 group card-shadow-hover ${
                       isSelected
                         ? 'border-blue-600 scale-105'
                         : 'border-transparent hover:border-blue-300'
-                    } ${isLocked ? 'opacity-75' : ''}`}
+                    }`}
                   >
                     <Image
                       src={style.image}
@@ -486,21 +490,17 @@ function OnboardingContent() {
                         <Check className="w-5 h-5 text-white" />
                       </div>
                     )}
-                    {isLocked && (
-                      <div className="absolute top-2 left-2 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg">
-                        <Lock className="w-4 h-4 text-white" />
-                      </div>
-                    )}
+
                   </div>
                 )
               })}
             </div>
 
             {/* Custom Style Input for Max users */}
-            {selectedStyles.includes('custom-style') && isMaxUser && (
+            {selectedStyles.includes('custom-style') && (
               <div className="max-w-md mx-auto mt-6 p-4 bg-white/80 backdrop-blur rounded-xl border border-blue-200 card-shadow">
                 <label className="block text-sm font-medium text-gray-800 mb-2">
-                  ✨ Describe your custom style (Max Exclusive)
+                  ✨ Describe your custom style
                 </label>
                 <input
                   type="text"
@@ -524,38 +524,29 @@ function OnboardingContent() {
                 Pick Your Backgrounds
               </h1>
               <p className="text-lg text-gray-700">
-                Selected: <span className="font-bold text-blue-600">{selectedBackgrounds.length}</span> / {limits.backgrounds === 99 ? 'All' : limits.backgrounds}
+                Selected: <span className="font-bold text-blue-600">{selectedBackgrounds.length}</span>
               </p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {backgrounds.map((bg) => {
-                const isMaxOnlyItem = 'maxOnly' in bg && bg.maxOnly
-                const isLocked = isMaxOnlyItem && !isMaxUser
                 const isSelected = selectedBackgrounds.includes(bg.id)
                 
                 return (
                   <div
                     key={bg.id}
                     onClick={() => {
-                      if (isLocked) {
-                        setUpgradeReason('Custom Background (Max Exclusive)')
-                        setShowUpgradeModal(true)
-                        return
-                      }
                       toggleSelection(
                         bg.id,
                         selectedBackgrounds,
-                        setSelectedBackgrounds,
-                        limits.backgrounds,
-                        'backgrounds'
+                        setSelectedBackgrounds
                       )
                     }}
                     className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-6 group card-shadow-hover ${
                       isSelected
                         ? 'border-blue-600 scale-105'
                         : 'border-gray-300 hover:border-blue-300'
-                    } ${isLocked ? 'opacity-75' : ''}`}
+                    }`}
                     style={{ backgroundColor: bg.preview }}
                   >
                     <div className="h-32 flex items-center justify-center flex-col">
@@ -569,21 +560,16 @@ function OnboardingContent() {
                         <Check className="w-5 h-5 text-white" />
                       </div>
                     )}
-                    {isLocked && (
-                      <div className="absolute top-2 left-2 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg">
-                        <Lock className="w-4 h-4 text-white" />
-                      </div>
-                    )}
                   </div>
                 )
               })}
             </div>
 
             {/* Custom Background Input for Max users */}
-            {selectedBackgrounds.includes('custom-background') && isMaxUser && (
+            {selectedBackgrounds.includes('custom-background') && (
               <div className="max-w-md mx-auto mt-6 p-4 bg-white/80 backdrop-blur rounded-xl border border-blue-200 card-shadow">
                 <label className="block text-sm font-medium text-gray-800 mb-2">
-                  ✨ Describe your custom background (Max Exclusive)
+                  ✨ Describe your custom background
                 </label>
                 <input
                   type="text"
@@ -607,64 +593,40 @@ function OnboardingContent() {
                 Add Fun Accessories
               </h1>
               <p className="text-lg text-gray-700">
-                Selected: <span className="font-bold text-blue-600">{selectedAccessories.length}</span> / {limits.accessories === 99 ? 'All' : limits.accessories}
+                Selected: <span className="font-bold text-blue-600">{selectedAccessories.length}</span>
               </p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
               {accessories.map((accessory) => {
-                const isPlanLocked = limits.accessories === 0
-                const isMaxOnlyItem = 'maxOnly' in accessory && accessory.maxOnly
-                const isLocked = isPlanLocked || (isMaxOnlyItem && !isMaxUser)
                 const isSelected = selectedAccessories.includes(accessory.id)
                 
                 return (
                   <div
                     key={accessory.id}
                     onClick={() => {
-                      if (isMaxOnlyItem && !isMaxUser) {
-                        setUpgradeReason('Custom Accessory (Max Exclusive)')
-                        setShowUpgradeModal(true)
-                        return
-                      }
-                      if (isPlanLocked) {
-                        setUpgradeReason('accessories')
-                        setShowUpgradeModal(true)
-                        return
-                      }
                       toggleSelection(
                         accessory.id,
                         selectedAccessories,
-                        setSelectedAccessories,
-                        limits.accessories,
-                        'accessories'
+                        setSelectedAccessories
                       )
                     }}
                     className={`relative cursor-pointer rounded-lg overflow-hidden transition-all border-4 p-8 bg-white group card-shadow-hover ${
                       isSelected
                         ? 'border-blue-600 scale-105'
                         : 'border-gray-300 hover:border-blue-300'
-                    } ${isLocked ? 'opacity-75 hover:opacity-100' : ''}`}
+                    }`}
                   >
                     <div className="text-center">
                       <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">{accessory.emoji}</div>
                       <p className="font-semibold text-gray-800">
                         {accessory.name}
                       </p>
-                      {isMaxOnlyItem && <span className="text-xs text-yellow-600">✨ Max Exclusive</span>}
                     </div>
                     
                     {isSelected && (
                       <div className="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-in zoom-in">
                         <Check className="w-5 h-5 text-white" />
-                      </div>
-                    )}
-
-                    {isLocked && (
-                      <div className="absolute inset-0 bg-gray-100/50 flex items-center justify-center backdrop-blur-[1px]">
-                        <div className="bg-white p-2 rounded-full shadow-lg">
-                          <Lock className="w-6 h-6 text-gray-400" />
-                        </div>
                       </div>
                     )}
                   </div>
@@ -673,10 +635,10 @@ function OnboardingContent() {
             </div>
 
             {/* Custom Accessory Input for Max users */}
-            {selectedAccessories.includes('custom-accessory') && isMaxUser && (
+            {selectedAccessories.includes('custom-accessory') && (
               <div className="max-w-md mx-auto mt-6 p-4 bg-white/80 backdrop-blur rounded-xl border border-blue-200 card-shadow">
                 <label className="block text-sm font-medium text-gray-800 mb-2">
-                  ✨ Describe your custom accessory (Max Exclusive)
+                  ✨ Describe your custom accessory
                 </label>
                 <input
                   type="text"
@@ -687,21 +649,6 @@ function OnboardingContent() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white placeholder:text-black/70 text-black/90"
                 />
                 <p className="text-xs text-gray-500 mt-1 text-right">{customAccessoryText.length}/64 characters</p>
-              </div>
-            )}
-
-            {limits.accessories === 0 && (
-              <div className="text-center mt-4">
-                <p className="text-gray-600">
-                  Accessories are locked on the Starter plan.{' '}
-                  <button
-                    onClick={() => setShowUpgradeModal(true)}
-                    className="text-blue-600 font-semibold hover:underline"
-                  >
-                    Upgrade to Pro
-                  </button>
-                  {' '}to unlock fun props!
-                </p>
               </div>
             )}
           </div>
