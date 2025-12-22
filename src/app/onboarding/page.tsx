@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'import { toast } from 'sonner'import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { toast } from 'sonner'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Check, ArrowRight, ArrowLeft, Lock, Zap, Mail, Eye, EyeOff } from 'lucide-react'
