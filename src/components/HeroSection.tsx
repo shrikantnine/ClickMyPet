@@ -191,15 +191,16 @@ export default function HeroSection() {
             Instantly generate an album of portraits with unique styles and fun accessories
           </p>
           <div className="mt-8 flex justify-center">
-            <Link href="/onboarding">
-              <Button
-                variant="moody-fill"
-                size="lg"
-                className="w-full md:w-auto text-lg px-8 py-6 font-bold"
-              >
+            <Button
+              variant="moody-fill"
+              size="lg"
+              className="w-full md:w-auto text-lg px-8 py-6 font-bold"
+              asChild
+            >
+              <Link href="/onboarding">
                 Create Your Pet Portraits Now
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
           <div className="mt-4 flex items-center justify-center gap-2">
             <div className="flex">

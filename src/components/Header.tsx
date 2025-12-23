@@ -69,11 +69,11 @@ export default function Header() {
               <Link href="/blog" className="text-gray-800 hover:text-gray-900 transition-colors">
                 Blog
               </Link>
-              <Link href="/onboarding">
-                <Button variant="moody-fill" size="sm" className="flex items-center gap-2">
+              <Button variant="moody-fill" size="sm" className="flex items-center gap-2" asChild>
+                <Link href="/onboarding">
                   Create Your Pet Portraits Now
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </nav>
 
             {/* Mobile Menu Button */}

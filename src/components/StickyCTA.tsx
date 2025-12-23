@@ -50,11 +50,11 @@ export default function StickyCTA({ alwaysVisible = false }: StickyCtaProps = {}
         {/* Mobile: Stack vertically */}
         <div className="flex flex-col items-center gap-2 md:hidden">
           {/* CTA Button - Centered */}
-          <Link href="/onboarding">
-            <Button variant="moody-fill" className="font-bold text-sm px-6">
+          <Button variant="moody-fill" className="font-bold text-sm px-6" asChild>
+            <Link href="/onboarding">
               Create Your Pet Portraits Now
-            </Button>
-          </Link>
+            </Link>
+          </Button>
 
           {/* Rating and Reviews - Below button */}
           <div className="flex items-center gap-2">
@@ -74,11 +74,11 @@ export default function StickyCTA({ alwaysVisible = false }: StickyCtaProps = {}
         {/* Desktop: Horizontal layout */}
         <div className="hidden md:flex items-center justify-between">
           {/* CTA Button */}
-          <Link href="/onboarding">
-            <Button variant="moody-fill" className="font-bold text-sm px-6">
+          <Button variant="moody-fill" className="font-bold text-sm px-6" asChild>
+            <Link href="/onboarding">
               Create Your Pet Portraits Now
-            </Button>
-          </Link>
+            </Link>
+          </Button>
 
           {/* Rating and Reviews */}
           <div className="flex items-center gap-2">
