@@ -104,7 +104,10 @@ function OnboardingContent() {
   // Check for existing session and listen for auth changes
   useEffect(() => {
     // Only check auth if supabase is configured
-    if (!supabase) return
+    if (!supabase) {
+      console.log('Supabase not configured, skipping auth check')
+      return
+    }
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -527,46 +530,6 @@ function OnboardingContent() {
           </div>
         )}
       </div>
-
-      {/* Upgrade Modal */}
-      <Dialog open={showUpgradeModal} onOpenChange={setShowUpgradeModal}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-xl">
-              <Zap className="w-5 h-5 text-yellow-500" />
-              Unlock More {upgradeReason}!
-            </DialogTitle>
-            <DialogDescription className="text-gray-600">
-              Upgrade to unlock more creative options and get amazing results.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="bg-blue-50 p-4 rounded-lg my-2">
-            <h4 className="font-semibold text-blue-900 mb-2">Upgrade to Pro & Get:</h4>
-            <ul className="space-y-2 text-sm text-blue-800">
-              <li className="flex items-center gap-2">
-                <Check className="w-4 h-4" /> 40 AI Images (vs 20)
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="w-4 h-4" /> 8 Styles & All Backgrounds
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="w-4 h-4" /> Premium Accessories
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="w-4 h-4" /> 10 Min Delivery
-              </li>
-            </ul>
-          </div>
-          <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button variant="outline" onClick={() => setShowUpgradeModal(false)}>
-              Maybe Later
-            </Button>
-            <Button onClick={handleUpgrade} variant="moody-fill" className="border-0">
-              Upgrade for just $20 more
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Sticky Bottom Navigation */}
       <div className="bg-white border-t border-gray-200 sticky bottom-0 z-50 card-shadow">
